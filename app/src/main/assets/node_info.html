@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="apphost_android.js"></script>
+<script src="apphost.js"></script>
+<p id="info">uninitialized</p>
+<script>
+    async function run() {
+        let id = await appHost.resolve("localnode")
+        let info = await appHost.nodeInfo(id)
+        document.getElementById("info").innerText = JSON.stringify(info)
+    }
+
+    run()
+</script>
+</html>

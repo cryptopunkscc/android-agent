@@ -1,0 +1,36 @@
+plugins {
+    id 'java-library'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+
+task updateAstral(type: Exec) {
+    group 'build'
+//    def commit = "latest"
+    def commit = "93d1734"
+    commandLine "go", "get", "github.com/cryptopunkscc/astrald@$commit"
+}
+
+task updateGoMobile(type: Exec) {
+    group 'build'
+    commandLine "go", 'get', "golang.org/x/mobile/bind"
+}
+
+task buildGoMobile(type: Exec) {
+    group 'build'
+    dependsOn updateGoMobile, updateAstral
+    inputs.files files("go.mod", 'go.sum'), fileTree("./") { include "*.go" }
+    outputs.upToDateWhen {
+        file('./build/astral.aar').exists()
+    }
+    doFirst {
+        mkdir buildDir
+    }
+    commandLine "gomobile", "bind", "-v", "-o", "./build/astral.aar", "-target=android"
+}
+
+compileJava.dependsOn buildGoMobile
