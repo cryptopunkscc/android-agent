@@ -5,17 +5,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -23,18 +28,34 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         startAstralService()
         setContent {
+            val status by astralStatus.collectAsState()
+            var goja by remember { mutableStateOf("unknown") }
             AstralTheme {
-                val status by astralStatus.collectAsState()
-                Box(contentAlignment = Alignment.Center) {
-                    Text(
-                        text = status.name
-                    )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    Column {
+                        Text(
+                            text = "astral status: " + status.name
+                        )
+                        Text(
+                            text = "goja status: $goja"
+                        )
+                    }
                 }
             }
-        }
-        GlobalScope.launch {
-            astralStatus.filter { it == AstralStatus.Started }.collect {
-                startActivity(Intent(this@MainActivity, AstralWebView::class.java))
+            LaunchedEffect(Unit) {
+                astralStatus.filter { it == AstralStatus.Started }.collect {
+                    goja = "copying"
+                    try {
+                        copyGojaBackend()
+                        goja = "copied"
+                        startActivity(Intent(this@MainActivity, AstralWebView::class.java))
+                    } catch (e: Throwable) {
+                        goja = e.localizedMessage ?: "error"
+                    }
+                }
             }
         }
     }
