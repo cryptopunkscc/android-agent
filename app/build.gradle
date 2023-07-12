@@ -59,3 +59,9 @@ dependencies {
     implementation "androidx.compose.material:material:1.4.3"
     debugImplementation "androidx.compose.ui:ui-tooling:1.4.3"
 }
+
+tasks.whenTaskAdded { task ->
+    if (task.name in ["mergeDebugAssets", "mergeReleaseAssets", "lintVitalAnalyzeRelease", "lintVitalAnalyzeDebug"]) {
+        task.dependsOn(':goja:copyGojaBackend')
+    }
+}

@@ -1,0 +1,30 @@
+task updateGojaBackend(type: Exec) {
+    group 'build'
+    def commit = "latest"
+//    def commit = "4095d9ab"
+    commandLine "go", "get", "github.com/cryptopunkscc/go-astral-js/cmd/goja@$commit"
+}
+
+def gojaBin = 'astral-goja-android-arm64'
+
+task buildGojaBackend(type: Exec) {
+    group 'build'
+    dependsOn updateGojaBackend
+    inputs.files files("go.mod", 'go.sum')
+    outputs.upToDateWhen {
+        file("$buildDir/$gojaBin").exists()
+    }
+    doFirst {
+        mkdir buildDir
+    }
+    environment "GOOS", "android"
+    environment "GOARCH", "arm64"
+    commandLine "go", "build", "-o", "$buildDir/$gojaBin", "github.com/cryptopunkscc/go-astral-js/cmd/goja"
+}
+
+
+task copyGojaBackend(type: Copy) {
+    dependsOn buildGojaBackend
+    from "$buildDir/$gojaBin"
+    into "../app/src/main/assets/bin"
+}

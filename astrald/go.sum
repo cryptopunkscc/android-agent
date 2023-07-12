@@ -3,10 +3,6 @@ bitbucket.org/creachadair/shell v0.0.7/go.mod h1:oqtXSSvSYr4624lnnabXHaBsYW6RD80
 github.com/btcsuite/btcd/btcec/v2 v2.1.3 h1:xM/n3yIhHAhHy04z4i43C8p4ehixJZMsnrVJkgl+MTE=
 github.com/btcsuite/btcd/btcec/v2 v2.1.3/go.mod h1:ctjw4H1kknNJmRN4iP1R7bTQ+v3GJkZBd6mui8ZsAZE=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
-github.com/cryptopunkscc/astrald v0.0.0-20230613005844-93d1734d03e3 h1:mxKHQdbZBTPqxArVPUv1uT9X3fgWdzy7fMYxUytxBRQ=
-github.com/cryptopunkscc/astrald v0.0.0-20230613005844-93d1734d03e3/go.mod h1:s85iIqeXTJ4YesJeoJlgoLbtbBrQNtznb+w07I0+fG0=
-github.com/cryptopunkscc/astrald v0.0.0-20230709202319-61e82bf43454 h1:5zR/NK0OTMLkaq194Iwz9qfoNTZb/ihyChS7LbLy3bY=
-github.com/cryptopunkscc/astrald v0.0.0-20230709202319-61e82bf43454/go.mod h1:s85iIqeXTJ4YesJeoJlgoLbtbBrQNtznb+w07I0+fG0=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/decred/dcrd/crypto/blake256 v1.0.0/go.mod h1:sQl2p6Y26YV+ZOcSTP6thNdn47hh8kt6rqSlvmrXFAc=
 github.com/decred/dcrd/dcrec/secp256k1/v4 v4.1.0 h1:HbphB4TFFXpv7MNrT52FGrrgVXF1owhMVTHFZIlnvd4=

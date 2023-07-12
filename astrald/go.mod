@@ -3,6 +3,7 @@ module github.com/cryptopunkscc/android-astral-agent
 go 1.19
 
 require github.com/cryptopunkscc/astrald v0.0.0-20230613005844-93d1734d03e3
+
 //astraljs v0.0.0-00010101000000-000000000000
 
 require github.com/google/uuid v1.3.0
@@ -29,4 +30,5 @@ require (
 )
 
 replace github.com/cryptopunkscc/astrald => ../../astrald
+
 //replace astraljs => github.com/cryptopunkscc/go-astral-js v0.0.0-20230529010754-eea3b33c25a4
