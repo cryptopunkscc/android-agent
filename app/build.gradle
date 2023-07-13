@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "cc.cryptopunks.astral.agent"
         minSdk 24
-        targetSdk 28
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -58,10 +58,4 @@ dependencies {
     implementation "androidx.compose.animation:animation:1.4.3"
     implementation "androidx.compose.material:material:1.4.3"
     debugImplementation "androidx.compose.ui:ui-tooling:1.4.3"
-}
-
-tasks.whenTaskAdded { task ->
-    if (task.name in ["mergeDebugAssets", "mergeReleaseAssets", "lintVitalAnalyzeRelease", "lintVitalAnalyzeDebug"]) {
-        task.dependsOn(':goja:copyGojaBackend')
-    }
 }

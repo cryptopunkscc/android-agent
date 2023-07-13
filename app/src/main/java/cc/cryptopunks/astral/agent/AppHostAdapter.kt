@@ -34,9 +34,6 @@ object AppHostAdapter {
     fun resolve(var1: String): String = client.resolve(var1)
 
     @JavascriptInterface
-    fun serviceExec(var1: String, var2: String) = client.serviceExec(var1, var2)
-
-    @JavascriptInterface
     fun serviceClose(var1: String) = client.serviceClose(var1)
 
     @JavascriptInterface
