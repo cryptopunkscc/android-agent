@@ -59,7 +59,3 @@ func Identity() string {
 func Stop() {
 	stop()
 }
-
-func Node() node.Node {
-	return n
-}
