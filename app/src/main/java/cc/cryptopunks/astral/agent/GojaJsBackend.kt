@@ -2,16 +2,17 @@ package cc.cryptopunks.astral.agent
 
 import android.content.Context
 
-private const val BackendFilepath = "bin/astral-goja-android-arm64"
+const val GojaBackendFilepath = "bin/astral-goja-android-arm64"
+const val GojaBackendFilename = "astral-goja-android-arm64"
 
 fun Context.copyGojaBackend() {
     // prepare bind dir
     dataDir.resolve("bin").mkdir()
 
     // copy file
-    val outFile = dataDir.resolve(BackendFilepath)
+    val outFile = dataDir.resolve(GojaBackendFilepath)
     val outStream = outFile.outputStream()
-    val inStream = assets.open(BackendFilepath)
+    val inStream = assets.open(GojaBackendFilepath)
 
     inStream.use { i ->
         outStream.use { o ->
@@ -21,5 +22,5 @@ fun Context.copyGojaBackend() {
     }
 
     // set executable
-    outFile.setExecutable(true)
+    outFile.setExecutable(true, false)
 }

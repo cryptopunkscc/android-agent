@@ -51,8 +51,19 @@ class MainActivity : ComponentActivity() {
                     try {
                         copyGojaBackend()
                         goja = "copied"
+                        AppHostAdapter.run {
+                            val id = resolve("localnode")
+                            println("start service with identity: $id")
+//                            serviceExec(id, dataDir.resolve(GojaBackendFilepath).absolutePath)
+                            val dir = dataDir.resolve("bin")
+                            val file = dir.resolve(GojaBackendFilename)
+                            if (file.exists().not()) throw Exception(file.absolutePath + " not exist")
+//                            ProcessRunner.run(dir.absolutePath, "$GojaBackendFilename app.js")
+                            ProcessRunner.run(dir.absolutePath, "ls -lah")
+                        }
                         startActivity(Intent(this@MainActivity, AstralWebView::class.java))
                     } catch (e: Throwable) {
+                        e.printStackTrace()
                         goja = e.localizedMessage ?: "error"
                     }
                 }

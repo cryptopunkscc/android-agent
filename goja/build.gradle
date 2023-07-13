@@ -1,7 +1,7 @@
 task updateGojaBackend(type: Exec) {
     group 'build'
-    def commit = "latest"
-//    def commit = "4095d9ab"
+//    def commit = "latest"
+    def commit = "4095d9ab"
     commandLine "go", "get", "github.com/cryptopunkscc/go-astral-js/cmd/goja@$commit"
 }
 
@@ -18,7 +18,8 @@ task buildGojaBackend(type: Exec) {
         mkdir buildDir
     }
     environment "GOOS", "android"
-    environment "GOARCH", "arm64"
+//    environment "GOARCH", "arm64"
+    environment "GOARCH", "amd64"
     commandLine "go", "build", "-o", "$buildDir/$gojaBin", "github.com/cryptopunkscc/go-astral-js/cmd/goja"
 }
 

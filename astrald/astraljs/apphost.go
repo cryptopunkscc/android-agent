@@ -92,8 +92,16 @@ func (api *AppHostFlatAdapter) Sleep(duration int64) {
 	time.Sleep(time.Duration(duration) * time.Millisecond)
 }
 
+func (api *AppHostFlatAdapter) ServiceExec(identity string, app string, args []string, env []string) (err error) {
+	sid, err := id.ParsePublicKeyHex(identity)
+	if err != nil {
+		return
+	}
+	return api.client.Exec(sid, app, args, env)
+}
+
 func (api *AppHostFlatAdapter) ServiceRegister(service string) (err error) {
-	listener, err := astral.Register(service)
+	listener, err := api.client.Register(service)
 	if err != nil {
 		return
 	}

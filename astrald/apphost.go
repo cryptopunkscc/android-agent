@@ -28,6 +28,10 @@ func (client *AppHostClient) Sleep(duration int64) {
 	client.adapter.Sleep(duration)
 }
 
+func (client *AppHostClient) ServiceExec(identity string, service string) (err error) {
+	return client.adapter.ServiceExec(identity, service, nil, nil)
+}
+
 func (client *AppHostClient) ServiceRegister(service string) (err error) {
 	return client.adapter.ServiceRegister(service)
 }
