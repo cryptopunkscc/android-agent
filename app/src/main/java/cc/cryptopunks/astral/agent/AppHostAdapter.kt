@@ -10,6 +10,9 @@ object AppHostAdapter {
     fun log(var1: String) = client.log(var1)
 
     @JavascriptInterface
+    fun logArr(var1: String) = client.logArr(var1)
+
+    @JavascriptInterface
     fun sleep(var1: Long) = client.sleep(var1)
 
     @JavascriptInterface

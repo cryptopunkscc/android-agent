@@ -1,7 +1,10 @@
 package astral
 
 import (
-	"github.com/cryptopunkscc/android-astral-agent/astraljs"
+	"encoding/json"
+	"fmt"
+	"github.com/cryptopunkscc/astrald/lib/astral"
+	"github.com/cryptopunkscc/go-astral-js"
 )
 
 type AppHostClient struct {
@@ -16,9 +19,14 @@ func (client *AppHostClient) Log(arg string) {
 	client.adapter.Log(arg)
 }
 
-func (client *AppHostClient) LogArr(arg []string) {
-	arr := make([]any, len(arg))
-	for i, v := range arg {
+func (client *AppHostClient) LogArr(arg string) {
+	var stringSlice []string
+	err := json.Unmarshal([]byte(arg), &stringSlice)
+	if err != nil {
+		fmt.Println("Error parsing JSON array:", err)
+	}
+	arr := make([]any, len(stringSlice))
+	for i, v := range stringSlice {
 		arr[i] = v
 	}
 	client.adapter.LogArr(arr)
@@ -74,3 +82,7 @@ func (client *AppHostClient) GetNodeInfo(identity string) (info *NodeInfo, err e
 }
 
 type NodeInfo astraljs.NodeInfo
+
+func init() {
+	astral.Client = *astral.NewClient("tcp:127.0.0.1:8625", "")
+}

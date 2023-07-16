@@ -10,8 +10,7 @@ java {
 
 task updateAstral(type: Exec) {
     group 'build'
-//    def commit = "latest"
-    def commit = "93d1734"
+    def commit = "latest"
     commandLine "go", "get", "github.com/cryptopunkscc/astrald@$commit"
 }
 
@@ -22,7 +21,7 @@ task updateGoMobile(type: Exec) {
 
 task buildGoMobile(type: Exec) {
     group 'build'
-    dependsOn updateGoMobile, updateAstral
+//    dependsOn updateGoMobile, updateAstral
     inputs.files files("go.mod", 'go.sum'), fileTree("./") { include "*.go" }
     outputs.upToDateWhen {
         file('./build/astral.aar').exists()

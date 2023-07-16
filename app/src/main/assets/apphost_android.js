@@ -39,7 +39,7 @@ function astral_service_register(arg1) {
 }
 
 function log(...arg1) {
-  return _app_host.logArr(arg1);
+  return _app_host.logArr(JSON.stringify(arg1));
 }
 
 function sleep(arg1) {

@@ -20,6 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import astral.Astral
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 
 class MainActivity : ComponentActivity() {
@@ -45,6 +47,17 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(Unit) {
                 astralStatus.filter { it == AstralStatus.Started }.collect {
                     try {
+                        val source = assets.open("hello.js").reader().readText()
+                        println("backend service source code:")
+                        println(source)
+
+                        delay(2000)
+                        Thread {
+                            println("backend service starting")
+                            Astral.runGojaJsBackend(source)
+                        }.start()
+
+                        delay(1000)
                         startActivity(Intent(this@MainActivity, AstralWebView::class.java))
                     } catch (e: Throwable) {
                         e.printStackTrace()
