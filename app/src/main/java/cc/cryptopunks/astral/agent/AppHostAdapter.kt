@@ -28,7 +28,7 @@ object AppHostAdapter {
     fun connWrite(var1: String, var2: String) = client.connWrite(var1, var2)
 
     @JavascriptInterface
-    fun query(var1: String, var2: String): String = client.query(var1, var2)
+    fun query(var1: String?, var2: String): String = client.query(var1, var2)
 
     @JavascriptInterface
     fun queryName(var1: String, var2: String): String = client.queryName(var1, var2)

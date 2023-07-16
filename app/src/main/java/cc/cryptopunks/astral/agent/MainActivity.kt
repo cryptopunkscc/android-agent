@@ -1,17 +1,16 @@
 package cc.cryptopunks.astral.agent
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,9 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import astral.Astral
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filter
 
 class MainActivity : ComponentActivity() {
 
@@ -31,7 +27,6 @@ class MainActivity : ComponentActivity() {
         startAstralService()
         setContent {
             val status by astralStatus.collectAsState()
-            var goja by remember { mutableStateOf("unknown") }
             AstralTheme {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -41,27 +36,21 @@ class MainActivity : ComponentActivity() {
                         Text(
                             text = "astral status: " + status.name
                         )
-                    }
-                }
-            }
-            LaunchedEffect(Unit) {
-                astralStatus.filter { it == AstralStatus.Started }.collect {
-                    try {
-                        val source = assets.open("hello.js").reader().readText()
-                        println("backend service source code:")
-                        println(source)
-
-                        delay(2000)
-                        Thread {
-                            println("backend service starting")
-                            Astral.runGojaJsBackend(source)
-                        }.start()
-
-                        delay(1000)
-                        startActivity(Intent(this@MainActivity, AstralWebView::class.java))
-                    } catch (e: Throwable) {
-                        e.printStackTrace()
-                        goja = e.localizedMessage ?: "error"
+                        Button(onClick = {
+                            startActivity(jsAppIntent("node_info.html"))
+                        }) {
+                            Text(text = "node info")
+                        }
+                        Button(onClick = {
+                            startActivity(jsAppIntent("hello.html"))
+                        }) {
+                            Text(text = "basic example")
+                        }
+                        Button(onClick = {
+                            startActivity(jsAppIntent("hello.rpc.html"))
+                        }) {
+                            Text(text = "rpc example")
+                        }
                     }
                 }
             }

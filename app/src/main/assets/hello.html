@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="apphost_android.js"></script>
+<script src="apphost.js"></script>
+<p>click start and wait 3 seconds for response</p>
+<script>
+    log("test log")
+    async function run() {
+        let conn = await appHost.query(null, "hello")
+        await conn.write("hello I am frontend")
+        let result = await conn.read()
+        await conn.close()
+        alert(result)
+    }
+    function start() {
+        run()
+        run()
+        run()
+    }
+</script>
+<button onclick="start()">start</button>
+</html>

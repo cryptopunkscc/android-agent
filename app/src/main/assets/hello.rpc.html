@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="apphost_android.js"></script>
+<script src="apphost.js"></script>
+<script>
+    async function rpc() {
+        let srv = await appHost.query("", "srv")
+        await srv.bindRpc()
+
+        let result = await srv.get("Hello from front")
+        alert(JSON.stringify(result))
+
+        result = await srv.sum(1, 2)
+        alert(result)
+
+        await srv.close()
+    }
+
+    rpc()
+</script>
+</html>

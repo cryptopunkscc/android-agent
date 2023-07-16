@@ -2,6 +2,8 @@ package cc.cryptopunks.astral.agent
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -14,6 +16,7 @@ class AstralWebView : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(webView)
+        val name = intent.getStringExtra("name") ?: return
         webView.apply {
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
@@ -24,52 +27,17 @@ class AstralWebView : Activity() {
             }
             addJavascriptInterface(AppHostAdapter, "_app_host")
             loadUrl("file:///android_asset/apphost_android.js")
-            loadDataWithBaseURL("file:///android_asset/apphost.js", index2, "html/text", "UTF-8", null)
+            val source = assets.open(name).reader().readText()
+            loadDataWithBaseURL("file:///android_asset/apphost.js", source, "html/text", "UTF-8", null)
         }
+    }
+
+    companion object {
+        fun intent(context: Context, appName: String) =
+            Intent(context, AstralWebView::class.java).apply {
+                putExtra("name", appName)
+            }
     }
 }
 
-val index = """
-<!DOCTYPE html>
-<html lang="en">
-<script src="apphost_android.js"></script>
-<script src="apphost.js"></script>
-<p id="info">uninitialized</p>
-<script>
-    async function run() {
-        let id = await appHost.resolve("localnode")
-        let info = await appHost.nodeInfo(id)
-        document.getElementById("info").innerText = JSON.stringify(info)
-    }
-
-    run()
-</script>
-</html>
-"""
-
-val index2 = """
-<!DOCTYPE html>
-<html lang="en">
-<script src="apphost_android.js"></script>
-<script src="apphost.js"></script>
-<script>
-    log("test log")
-    async function run() {
-        let conn = await appHost.queryName("", "hello")
-        await conn.write("hello I am frontend")
-        let result = await conn.read()
-        await conn.close()
-        alert(result)
-    }
-    run()
-    run()
-    run()
-    run()
-    run()
-    run()
-    run()
-    run()
-    run()
-</script>
-</html>
-""".trimIndent()
+fun Context.jsAppIntent(name: String) = AstralWebView.intent(this, name)

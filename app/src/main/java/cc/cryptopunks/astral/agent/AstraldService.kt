@@ -5,11 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import astral.Astral
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 
 class AstraldService : Service(), CoroutineScope {
 
@@ -29,6 +33,19 @@ class AstraldService : Service(), CoroutineScope {
                 startAstral()
             }
 //        }
+        launch {
+            astralStatus.filter { it == AstralStatus.Started }.collect {
+                launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+                    val source = assets.open("hello.js").reader().readText()
+                    Astral.runGojaJsBackend(source)
+                }
+
+                launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
+                    val source = assets.open("hello.rpc.js").reader().readText()
+                    Astral.runGojaJsBackend(source)
+                }
+            }
+        }
     }
 
     override fun onLowMemory() {
