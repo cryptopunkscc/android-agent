@@ -25,7 +25,7 @@ class AstralWebView : Activity() {
                 javaScriptEnabled = true
                 domStorageEnabled = true
             }
-            addJavascriptInterface(AppHostAdapter, "_app_host")
+            addJavascriptInterface(AppHostAdapter(webView), "_app_host")
             loadUrl("file:///android_asset/apphost_android.js")
             val source = assets.open(name).reader().readText()
             loadDataWithBaseURL("file:///android_asset/apphost.js", source, "html/text", "UTF-8", null)
