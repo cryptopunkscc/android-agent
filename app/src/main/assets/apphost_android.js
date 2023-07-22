@@ -7,14 +7,14 @@ function _promise(block) {
     });
 }
 
-function _resolve(id, value) {
-    _awaiting.get(id)[0](value);
-    _awaiting.delete(id);
+window._resolve = (id, value) => {
+    _awaiting.get(id)[0](value)
+    _awaiting.delete(id)
 }
 
-function _reject(id, error) {
-    _awaiting.get(id)[1](error);
-    _awaiting.delete(id);
+window._reject = (id, error) => {
+    _awaiting.get(id)[1](error)
+    _awaiting.delete(id)
 }
 
 function astral_conn_accept(arg1) {

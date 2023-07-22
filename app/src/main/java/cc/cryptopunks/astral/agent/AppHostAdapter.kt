@@ -69,10 +69,10 @@ class AppHostAdapter(
             val fn = try {
                 val result = block(id).takeIf { it != Unit }
                 val quoted = JSONObject.quote(result?.toString())
-                "_resolve(\"$id\", $quoted)"
+                "window._resolve(\"$id\", $quoted)"
             } catch (e: Throwable) {
                 val message = e.message
-                "_reject(\"$id\", \"$message\")"
+                "window._reject(\"$id\", \"$message\")"
             }
             launch(Dispatchers.Main) {
                 webView.evaluateJavascript(fn) {
