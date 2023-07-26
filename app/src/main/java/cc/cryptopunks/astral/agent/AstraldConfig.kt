@@ -21,7 +21,6 @@ private val Context.astralConfig get() = astralDir.nodeDir.astralConfig
 
 private val File.nodeDir get() = resolve("node").apply { if (!exists()) mkdir() }
 
-
 fun Context.loadAstralConfig() {
     if (state.value != EmptyConfig) return
     val file = astralConfig

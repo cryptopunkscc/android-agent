@@ -3,19 +3,25 @@ package cc.cryptopunks.astral.agent
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.webkit.MimeTypeMap
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.net.toFile
 import astral.Astral
 import java.io.File
 
-fun Activity.startJsAppActivity(name: String) {
+fun Activity.startJsAppActivity(app: JsApp) {
     val intent = Intent(this, AstralWebView::class.java)
-    intent.putExtra("name", name)
+    val dir = appsDir.resolve(app.dir)
+    val file = dir.resolve("index.html")
+    val uri = Uri.fromFile(file)
+    intent.data = uri
     startActivity(intent)
 }
 
@@ -23,37 +29,37 @@ class AstralWebView : Activity() {
 
     private val webView: WebView by lazy { WebView(this) }
     private val appHostClient by lazy { Astral.newAppHostClient() }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(webView)
 
-        val name = intent.getStringExtra("name") ?: return
-        val dir = appsDir.resolve(name)
-        val source = try {
-            val index = dir.resolve("index.html")
-            index.readText()
-        } catch (e: Throwable) {
-            e.printStackTrace()
-            return
-        }
+        val uri = intent.data ?: return
 
         webView.apply {
             webViewClient = object : WebViewClient() {
+
+                private val dir = uri.toFile().parentFile ?: File("")
+                private val tag = javaClass.simpleName
+
                 override fun shouldInterceptRequest(
                     view: WebView,
                     request: WebResourceRequest,
                 ): WebResourceResponse? {
                     return when (request.url.scheme) {
                         "file" -> {
-                            val path = request.url.path
-                            println("requesting path: $path")
-                            path ?: return null
+
+                            // Resolve requested file
+                            val path = request.url.path ?: return null
+                            Log.d(tag, "requesting path: $path")
                             val relative = if (path.startsWith('/')) path.drop(1) else path
                             val file = dir.resolve(relative)
-                            println("resolved file: ${file.absolutePath}, exist: ${file.exists()}")
+                            Log.d(
+                                tag,
+                                "resolved file: ${file.absolutePath}, exist: ${file.exists()}"
+                            )
                             file.exists() || return null
 
+                            // Prepare response data
                             val mimeType = file.mimeType
                             val encoding = "UTF-8"
                             val data = file.inputStream()
@@ -71,17 +77,16 @@ class AstralWebView : Activity() {
                 @SuppressLint("SetJavaScriptEnabled")
                 javaScriptEnabled = true
                 domStorageEnabled = true
+                useWideViewPort = true
+                allowFileAccess = true
+                allowContentAccess = true
+                domStorageEnabled = true
+                databaseEnabled = true
+                javaScriptCanOpenWindowsAutomatically = true
             }
 
             addJavascriptInterface(AppHostAdapter(webView, appHostClient), "_app_host")
-            loadUrl("file:///android_asset/apphost_android.js")
-            loadDataWithBaseURL(
-                "file:///android_asset/apphost.js",
-                source,
-                "html/text",
-                "UTF-8",
-                null
-            )
+            loadUrl(uri.toString())
         }
     }
 

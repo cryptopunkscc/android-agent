@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
                             items(apps) { app ->
                                 Row(
                                     modifier = Modifier
-                                        .clickable { startJsAppActivity(app.dir) }
+                                        .clickable { startJsAppActivity(app) }
                                         .padding(16.dp),
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
