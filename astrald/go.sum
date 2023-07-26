@@ -10,6 +10,8 @@ github.com/cryptopunkscc/astrald v0.0.0-20230712010746-5371cbcb887d h1:onRcpy2L4
 github.com/cryptopunkscc/astrald v0.0.0-20230712010746-5371cbcb887d/go.mod h1:s85iIqeXTJ4YesJeoJlgoLbtbBrQNtznb+w07I0+fG0=
 github.com/cryptopunkscc/go-astral-js v0.0.0-20230716134456-5a2772f3c0f1 h1:WLtzXWUh8kkSTvm8lnR4agm2JEeL4zTYF0+1N2Oxylc=
 github.com/cryptopunkscc/go-astral-js v0.0.0-20230716134456-5a2772f3c0f1/go.mod h1:upY7l5njjgs61Jw7IK7jImDMnEJQZyrMwzgf/xj+M3A=
+github.com/cryptopunkscc/go-astral-js v0.0.0-20230726002531-773c2522c739 h1:X/ziu3nfaL2H7Pp3SZBrpwuPbVme/s5zSrE1eQYOcZ8=
+github.com/cryptopunkscc/go-astral-js v0.0.0-20230726002531-773c2522c739/go.mod h1:upY7l5njjgs61Jw7IK7jImDMnEJQZyrMwzgf/xj+M3A=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/decred/dcrd/crypto/blake256 v1.0.0/go.mod h1:sQl2p6Y26YV+ZOcSTP6thNdn47hh8kt6rqSlvmrXFAc=
 github.com/decred/dcrd/dcrec/secp256k1/v4 v4.1.0 h1:HbphB4TFFXpv7MNrT52FGrrgVXF1owhMVTHFZIlnvd4=

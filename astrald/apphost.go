@@ -15,6 +15,10 @@ func NewAppHostClient() *AppHostClient {
 	return &AppHostClient{adapter: astraljs.NewAppHostFlatAdapter()}
 }
 
+func (client *AppHostClient) Close() {
+	astraljs.CloseAppHostFlatAdapter(client.adapter)
+}
+
 func (client *AppHostClient) Log(arg string) {
 	client.adapter.Log(arg)
 }
@@ -23,7 +27,8 @@ func (client *AppHostClient) LogArr(arg string) {
 	var stringSlice []string
 	err := json.Unmarshal([]byte(arg), &stringSlice)
 	if err != nil {
-		fmt.Println("Error parsing JSON array:", err)
+		fmt.Printf("cannot parse '%v' as JSON array: %v\n", arg, err)
+		return
 	}
 	arr := make([]any, len(stringSlice))
 	for i, v := range stringSlice {

@@ -24,8 +24,10 @@ internal fun Service.startForegroundNotification() {
         visibility = Notification.VISIBILITY_PRIVATE,
     )
 
+    val activityIntent = Intent(this, MainActivity::class.java)
+
     val pendingIntent: PendingIntent = PendingIntent
-        .getActivity(this, 0, astralActivityIntent, PendingIntent.FLAG_IMMUTABLE)
+        .getActivity(this, 0, activityIntent, PendingIntent.FLAG_IMMUTABLE)
 
     val builder = NotificationCompat
         .Builder(this, channelId)
@@ -35,30 +37,6 @@ internal fun Service.startForegroundNotification() {
 
     startForeground(1, builder.build())
 }
-
-//internal fun Context.showConfigureAstralNotification() {
-//    val channelId = createNotificationChannel(
-//        id = "info",
-//        channelName = "info",
-//        importance = NotificationManagerCompat.IMPORTANCE_MAX,
-//        color = Color.BLUE,
-//        visibility = Notification.VISIBILITY_PRIVATE,
-//    )
-//
-//    val pendingIntent: PendingIntent = PendingIntent
-//        .getActivity(this, 0, astralActivityIntent, PendingIntent.FLAG_IMMUTABLE)
-//
-//    val builder = NotificationCompat
-//        .Builder(this, channelId)
-//        .setSmallIcon(R.mipmap.ic_launcher)
-//        .setContentIntent(pendingIntent)
-//        .setContentTitle("Astral")
-//        .setContentText("Configuration required")
-//        .setAutoCancel(true)
-//        .setPriority(NotificationCompat.PRIORITY_MAX)
-//
-//    NotificationManagerCompat.from(this).notify(2, builder.build())
-//}
 
 val astralActivityIntent = Intent(Intent.ACTION_VIEW, Uri.parse("astral://main"))
 

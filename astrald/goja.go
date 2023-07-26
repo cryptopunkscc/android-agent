@@ -8,10 +8,17 @@ import (
 	"log"
 )
 
-func RunGojaJsBackend(source string) {
+func RunGojaJsBackend(source string) *Worker {
+	ctx, cancel := context.WithCancel(context.Background())
+	go runGojaJsBackend(ctx, source)
+	return NewWorker(ctx, cancel)
+}
+
+func runGojaJsBackend(ctx context.Context, source string) {
 	vm := goja.New()
 
-	err := goja2.Bind(vm, astraljs.NewAppHostFlatAdapter())
+	appHost := astraljs.NewAppHostFlatAdapter()
+	err := goja2.Bind(vm, appHost)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,7 +34,7 @@ func RunGojaJsBackend(source string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	ctx := context.Background()
 	<-ctx.Done()
+	vm.Interrupt(nil)
+	astraljs.CloseAppHostFlatAdapter(appHost)
 }

@@ -3,7 +3,7 @@ package cc.cryptopunks.astral.agent
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import astral.Astral
+import astral.AppHostClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -13,11 +13,10 @@ import java.util.UUID
 
 class AppHostAdapter(
     private val webView: WebView,
+    private val client: AppHostClient,
 ) : CoroutineScope {
 
     override val coroutineContext = SupervisorJob()
-
-    private val client = Astral.newAppHostClient()
 
     @JavascriptInterface
     fun log(var1: String) = client.log(var1)
@@ -63,7 +62,6 @@ class AppHostAdapter(
     }
 
     private fun <T> promise(block: suspend CoroutineScope.(UUID) -> T): String {
-        println(Thread.currentThread())
         val id = UUID.randomUUID()
         launch(Dispatchers.IO) {
             val fn = try {

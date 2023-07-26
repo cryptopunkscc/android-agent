@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/cryptopunkscc/astrald v0.0.0-20230712010746-5371cbcb887d
-	github.com/cryptopunkscc/go-astral-js v0.0.0-20230716134456-5a2772f3c0f1
+	github.com/cryptopunkscc/go-astral-js v0.0.0-20230726002531-773c2522c739
 	github.com/dop251/goja v0.0.0-20230707174833-636fdf960de1
 )
 

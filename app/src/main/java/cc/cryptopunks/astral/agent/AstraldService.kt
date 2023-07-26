@@ -5,15 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import astral.Astral
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 
 class AstraldService : Service(), CoroutineScope {
 
@@ -23,27 +20,18 @@ class AstraldService : Service(), CoroutineScope {
 
     override fun onCreate() {
         loadAstralConfig()
-//        if (astralConfig.value == EmptyConfig) {
-////            showConfigureAstralNotification()
-//            stopSelf()
-//        } else {
-            startForegroundNotification()
-            launch {
-                Log.d(tag, "Starting astral service")
-                startAstral()
-            }
-//        }
-        launch {
-            astralStatus.filter { it == AstralStatus.Started }.collect {
-                launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
-                    val source = assets.open("hello.js").reader().readText()
-                    Astral.runGojaJsBackend(source)
-                }
+        startForegroundNotification()
 
-                launch(Executors.newSingleThreadExecutor().asCoroutineDispatcher()) {
-                    val source = assets.open("hello.rpc.js").reader().readText()
-                    Astral.runGojaJsBackend(source)
-                }
+        launch {
+            Log.d(tag, "Starting astral service")
+            startAstral()
+        }
+
+        launch {
+            astralStatus.filter { status ->
+                status == AstralStatus.Started
+            }.collect {
+                jsAppsManager.startServices()
             }
         }
     }

@@ -16,7 +16,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Astralagent" >
+        android:theme="@style/Theme.MaterialComponents"
+        android:name=".AgentApp">
 
         <service
             android:name=".AstraldService"
