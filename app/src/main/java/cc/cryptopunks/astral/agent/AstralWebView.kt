@@ -22,6 +22,7 @@ fun Activity.startJsAppActivity(app: JsApp) {
     val file = dir.resolve("index.html")
     val uri = Uri.fromFile(file)
     intent.data = uri
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     startActivity(intent)
 }
 

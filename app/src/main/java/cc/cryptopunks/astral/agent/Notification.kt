@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
 
@@ -33,6 +34,8 @@ internal fun Service.startForegroundNotification() {
         .Builder(this, channelId)
         .setSmallIcon(R.mipmap.ic_launcher)
         .setContentIntent(pendingIntent)
+        .setOngoing(true)
+        .setForegroundServiceBehavior(FOREGROUND_SERVICE_IMMEDIATE)
         .setContentTitle("Astral")
 
     startForeground(1, builder.build())

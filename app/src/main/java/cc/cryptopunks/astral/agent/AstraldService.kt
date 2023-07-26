@@ -19,8 +19,8 @@ class AstraldService : Service(), CoroutineScope {
     private val tag = ASTRAL + "Service"
 
     override fun onCreate() {
+        Log.d(tag, "onCreate")
         loadAstralConfig()
-        startForegroundNotification()
 
         launch {
             Log.d(tag, "Starting astral service")
@@ -37,18 +37,15 @@ class AstraldService : Service(), CoroutineScope {
     }
 
     override fun onLowMemory() {
-        super.onLowMemory()
-        Log.d(tag, "On low memory")
+        Log.d(tag, "onLowMemory")
     }
 
     override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
-        Log.d(tag, "On trim memory")
+        Log.d(tag, "onTrimMemory")
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        super.onTaskRemoved(rootIntent)
-        Log.d(tag, "On task removed")
+        Log.d(tag, "onTaskRemoved")
     }
 
     override fun onDestroy() {
@@ -60,7 +57,11 @@ class AstraldService : Service(), CoroutineScope {
         cancel()
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.d(tag, "onStartCommand")
+        startForegroundNotification()
+        return START_STICKY
+    }
 
     override fun onBind(intent: Intent) = null
 }

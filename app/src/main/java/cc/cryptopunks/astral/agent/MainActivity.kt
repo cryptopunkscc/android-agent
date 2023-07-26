@@ -1,5 +1,7 @@
 package cc.cryptopunks.astral.agent
 
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,6 +32,12 @@ import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
 
+    private val askPermissions = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        startAstralService()
+    }
+
     private val filePickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri ->
@@ -43,6 +51,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            PackageManager.PERMISSION_GRANTED != checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+        ) {
+            askPermissions.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
         startAstralService()
         setContent {
             AstralTheme {
