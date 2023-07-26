@@ -51,6 +51,7 @@ class JsAppsManager(
         val name = Uri.parse(uri.lastPathSegment)
             .lastPathSegment
             ?.replace(".zip", "")
+            ?: uri.lastPathSegment
 
         if (stream != null && name != null) {
             context.appsDir.unpackZip(stream, name)
@@ -59,7 +60,7 @@ class JsAppsManager(
             val app = appDir.getApp()
 
             _apps.update { it + app }
-            Log.d(tag, "installed js app $name")
+            Log.d(tag, "installed js app ${app.name}")
 
             startService(app.name)
 
