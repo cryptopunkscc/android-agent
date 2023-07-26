@@ -40,3 +40,9 @@ Or install & start using adb commands:
 adb install ./app/build/outputs/apk/debug/app-debug.apk
 adb shell am start -n cc.cryptopunks.astral.agent/cc.cryptopunks.astral.agent.MainActivity
 ```
+
+## How to create JS app
+
+To create a JS app compatible with the android agent, please refer to the
+following [manual](https://github.com/cryptopunkscc/js-apphost-adapter/blob/master/example/react.md#create-bundle-with-frontend--backend)
+and example [react-basic](https://github.com/cryptopunkscc/js-apphost-adapter/tree/master/example/react-basic) app.
