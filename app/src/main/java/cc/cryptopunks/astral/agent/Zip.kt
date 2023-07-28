@@ -2,15 +2,14 @@ package cc.cryptopunks.astral.agent
 
 import java.io.BufferedInputStream
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-fun File.unpackZip(inputStream: InputStream, name: String) {
-    val outputDir = resolve(name).apply {
-        deleteRecursively()
-        mkdirs()
-    }
+fun unpackZip(inputStream: InputStream, outputDir: File): Unit = try {
+    outputDir.mkdirs()
+
     ZipInputStream(BufferedInputStream(inputStream)).use { zis ->
 
         val buffer = ByteArray(1024)
@@ -29,7 +28,6 @@ fun File.unpackZip(inputStream: InputStream, name: String) {
                 fmd.mkdirs()
                 continue
             }
-
             val file = outputDir.resolve(filename)
             val out = file.outputStream()
             out.use {
@@ -41,4 +39,8 @@ fun File.unpackZip(inputStream: InputStream, name: String) {
             zis.closeEntry()
         }
     }
+} catch (e: Throwable) {
+    throw UnpackZipException(e)
 }
+
+class UnpackZipException(cause: Throwable) : IOException(cause.message, cause)

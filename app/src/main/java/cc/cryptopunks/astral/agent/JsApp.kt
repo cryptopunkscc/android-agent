@@ -12,13 +12,16 @@ import kotlinx.coroutines.flow.update
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.util.UUID
 
 data class JsApp(
-    val dir: String,
     val name: String,
-    val description: String,
-    val icon: String?,
-    val service: String?,
+    val dir: String,
+    val description: String = "",
+    val icon: String? = null,
+    val service: String? = null,
 )
 
 val Context.appsDir get() = dataDir.resolve("apps")
@@ -46,27 +49,70 @@ class JsAppsManager(
         }
     }
 
-    fun install(uri: Uri): JsApp? {
+    @Throws(
+        FileNotFoundException::class,
+        UnpackZipException::class,
+    )
+    fun install(uri: Uri): JsApp {
+        val appsDir = context.appsDir
+
+        // Resolve stream from bundle uri
         val stream = context.contentResolver.openInputStream(uri)
-        val name = Uri.parse(uri.lastPathSegment)
-            .lastPathSegment
-            ?.replace(".zip", "")
-            ?: uri.lastPathSegment
+        stream ?: throw NullPointerException(
+            "ContentResolver returned null while trying to retrieve InputStream for Uri $uri."
+        )
 
-        if (stream != null && name != null) {
-            context.appsDir.unpackZip(stream, name)
+        // Create app temporary dir
+        val tempName = UUID.randomUUID().hashCode().toString()
+        val tempDir = appsDir.resolve(tempName)
 
-            val appDir = context.appsDir.resolve(name)
-            val app = appDir.getApp()
-
-            _apps.update { it + app }
-            Log.d(tag, "installed js app ${app.name}")
-
-            startService(app.name)
-
-            return app
+        // Unpack stream to temporary dir
+        try {
+            unpackZip(stream, tempDir)
+        } catch (e: Throwable) {
+            tempDir.deleteRecursively()
+            throw e
         }
-        return null
+
+        // Verify app metadata
+        var app = try {
+            tempDir.getApp()
+        } catch (e: Throwable) {
+            tempDir.deleteRecursively()
+            throw e
+        }
+
+        // Create app final dir
+        val finalName = app.name.lowercase().replace(" ", "-").replace("_", "-")
+        val finalDir = appsDir.resolve(finalName)
+
+        // Remove previous installation if exist
+        if (finalDir.exists()) {
+            uninstall(finalName)
+        }
+
+        // Rename temporary dir to final
+        try {
+            val renamed = tempDir.renameTo(finalDir)
+            renamed || throw IOException(
+                "Failed to rename temporary directory to the final location"
+            )
+        } catch (e: Throwable) {
+            tempDir.deleteRecursively()
+            finalDir.deleteRecursively()
+            throw e
+        }
+
+        // Finalize
+        app = app.copy(dir = finalName)
+        Log.d(tag, "installed js app ${app.name}")
+        _apps.update { list ->
+            if (list.contains(app)) list
+            else list + app
+        }
+        startService(app.name)
+
+        return app
     }
 
     operator fun get(name: String): JsApp? {
@@ -126,13 +172,14 @@ private fun Context.listApps(): List<JsApp> {
 }
 
 private fun File.getApp(): JsApp {
-    val manifest = resolve("manifest.json").readText()
+    val manifestFile = resolve("manifest.json")
+    val manifest = manifestFile.readText()
     val json = JSONObject(manifest)
 
     return JsApp(
         dir = path,
         name = json.getString("short_name"),
-        description = json.getString("name"),
+        description = json.optString("name"),
         icon = json.getJSONArray("icons").toList().map {
             it.getString("src")
         }.firstOrNull {

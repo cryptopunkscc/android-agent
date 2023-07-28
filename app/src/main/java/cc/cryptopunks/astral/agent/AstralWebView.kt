@@ -2,6 +2,7 @@ package cc.cryptopunks.astral.agent
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,7 +17,7 @@ import androidx.core.net.toFile
 import astral.Astral
 import java.io.File
 
-fun Activity.startJsAppActivity(app: JsApp) {
+fun Context.startJsAppActivity(app: JsApp) {
     val intent = Intent(this, AstralWebView::class.java)
     val dir = appsDir.resolve(app.dir)
     val file = dir.resolve("index.html")
