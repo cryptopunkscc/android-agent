@@ -27,9 +27,10 @@ fun Main(
     AstralTheme {
         Scaffold(
             topBar = {
-                TopAppBar(title = {
-                    Text(text = "Astral Agent")
-                })
+                TopAppBar(
+                    title = { Text(text = "Astral Agent") },
+                    actions = { AstralToggle() }
+                )
             },
             content = { paddingValues ->
                 Box(modifier = Modifier.padding(paddingValues)) {

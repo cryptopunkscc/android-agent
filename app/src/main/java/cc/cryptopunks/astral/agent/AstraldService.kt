@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
@@ -31,6 +32,7 @@ class AstraldService : Service(), CoroutineScope {
             astralStatus.filter { status ->
                 status == AstralStatus.Started
             }.collect {
+                delay(200)
                 jsAppsManager.startServices()
             }
         }
@@ -49,7 +51,8 @@ class AstraldService : Service(), CoroutineScope {
     }
 
     override fun onDestroy() {
-        stopForeground(true)
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        jsAppsManager.stopServices()
         if (astralStatus.value != AstralStatus.Stopped) {
             Log.d(tag, "Destroying astral service")
             stopAstral()
@@ -73,4 +76,9 @@ fun Context.startAstralService() {
     } else {
         startService(intent)
     }
+}
+
+fun Context.stopAstralService() {
+    val intent = Intent(this, AstraldService::class.java)
+    stopService(intent)
 }

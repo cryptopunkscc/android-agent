@@ -64,9 +64,8 @@ private fun Context.createNotificationChannel(
         -> NotificationChannelCompat.Builder(id, importance).apply {
             setLightColor(color)
         }.build().also { channel ->
-            getSystemService<NotificationManagerCompat>()
-                ?.createNotificationChannel(channel)
-                ?: throw Exception("Cannot obtain NotificationManagerCompat")
+            NotificationManagerCompat.from(this)
+                .createNotificationChannel(channel)
         }.id
     }
 }

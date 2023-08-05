@@ -49,6 +49,14 @@ class JsAppsManager(
         }
     }
 
+    fun stopServices() {
+        _apps.value.filter { app ->
+            running[app.name]?.isActive == true
+        }.forEach { app ->
+            stopService(app.name)
+        }
+    }
+
     @Throws(
         FileNotFoundException::class,
         UnpackZipException::class,
