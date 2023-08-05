@@ -3,15 +3,24 @@ package cc.cryptopunks.astral.agent.compose
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -29,8 +38,8 @@ import cc.cryptopunks.astral.agent.JsApp
 fun AppsPreview() = AstralTheme {
     Apps(
         apps = listOf(
-            JsApp("Some example app", ""),
-            JsApp("Other example app", ""),
+            JsApp("Some example app", "", description = "Some example description"),
+            JsApp("Other example app", "", description = "Some example description"),
             JsApp("Additional  app for preview", ""),
         )
     )
@@ -65,26 +74,47 @@ fun Apps(
         modifier = Modifier.padding(it)
     ) {
         items(apps) { app ->
-            Row(
-                modifier = Modifier
-                    .clickable {
-                        startClick(app)
-                    }
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(text = app.name)
-                Spacer(modifier = Modifier.weight(1f))
-                IconButton(
-                    onClick = {
-                        uninstallClick(app)
-                    }
+            Column {
+                Row(
+                    modifier = Modifier
+                        .clickable {
+                            startClick(app)
+                        }
+                        .padding(vertical = 16.dp)
+                        .padding(start = 24.dp, end = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Uninstall app"
-                    )
+                    Column {
+                        Text(
+                            text = app.name,
+                            style = MaterialTheme.typography.subtitle1,
+                        )
+                        if (app.description.isNotBlank()) {
+                            Spacer(modifier = Modifier.size(4.dp))
+                            Text(
+                                text = app.description,
+                                style = MaterialTheme.typography.caption,
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconButton(
+                        onClick = {
+                            uninstallClick(app)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Uninstall app"
+                        )
+                    }
                 }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(0.5.dp)
+                        .background(LocalContentColor.current.copy(alpha = LocalContentAlpha.current))
+                )
             }
         }
     }
