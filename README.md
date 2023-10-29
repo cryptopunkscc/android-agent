@@ -13,8 +13,8 @@
 
 ## Dev dependencies
 
-* GO 1.19
-* JDK 11 or later
+* GO 1.21
+* OpenJDK 17
 
 ## How to build
 
