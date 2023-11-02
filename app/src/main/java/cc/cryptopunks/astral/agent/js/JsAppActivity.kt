@@ -13,6 +13,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.ComponentActivity
+import androidx.activity.addCallback
 import androidx.core.net.toFile
 import astral.AppHostClient
 import astral.Astral
@@ -28,7 +30,7 @@ internal fun Context.startJsAppActivity(app: JsApp) {
     startActivity(intent)
 }
 
-class JsAppActivity : Activity() {
+class JsAppActivity : ComponentActivity() {
 
     private val webView: WebView by lazy { WebView(this) }
     private val appHostClient: AppHostClient by lazy { Astral.newAppHostClient() }
@@ -58,13 +60,15 @@ class JsAppActivity : Activity() {
             addJavascriptInterface(JsAppHostAdapter(webView, appHostClient), "_app_host")
             loadUrl(uri.toString())
         }
-    }
 
-    override fun onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack()
-        } else {
-            super.onBackPressed()
+        onBackPressedDispatcher.addCallback(this) {
+            if (webView.canGoBack()) {
+                webView.goBack()
+            } else {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+                isEnabled = true
+            }
         }
     }
 
