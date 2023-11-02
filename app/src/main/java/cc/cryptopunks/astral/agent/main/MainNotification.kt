@@ -1,4 +1,4 @@
-package cc.cryptopunks.astral.agent
+package cc.cryptopunks.astral.agent.main
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
+import cc.cryptopunks.astral.agent.R
 
 internal fun Service.startForegroundNotification() {
     val channelId = createNotificationChannel(

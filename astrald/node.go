@@ -6,7 +6,6 @@ import (
 	"github.com/cryptopunkscc/astrald/node"
 	"log"
 	"os"
-	"path/filepath"
 	"time"
 )
 
@@ -15,17 +14,13 @@ var identity string
 var stop context.CancelFunc
 
 func Start(
-	dir string,
-	// handlers Handlers,
-	// bluetooth Bluetooth,
+	astralRoot string,
 ) (err error) {
-	astralRoot := filepath.Join(dir, "astrald")
 	if err = os.MkdirAll(astralRoot, 0700); err != nil {
 		return
 	}
 
 	log.Println("Staring astrald")
-	//astral.ListenProtocol = "tcp"
 
 	// Set up app execution context
 	var ctx context.Context

@@ -1,4 +1,4 @@
-package cc.cryptopunks.astral.agent
+package cc.cryptopunks.astral.agent.node
 
 import android.content.Context
 import android.net.wifi.WifiManager

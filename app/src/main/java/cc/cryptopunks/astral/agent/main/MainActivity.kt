@@ -1,4 +1,4 @@
-package cc.cryptopunks.astral.agent
+package cc.cryptopunks.astral.agent.main
 
 import android.content.pm.PackageManager
 import android.os.Build
@@ -7,23 +7,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import cc.cryptopunks.astral.agent.compose.Main
-import cc.cryptopunks.astral.agent.compose.MainModel
+import androidx.compose.runtime.remember
+import cc.cryptopunks.astral.agent.compose.ErrorViewModel
+import cc.cryptopunks.astral.agent.js.JsAppsManager
+import cc.cryptopunks.astral.agent.util.use
+import java.lang.Exception
 
 class MainActivity : ComponentActivity() {
+
+    private val errors: ErrorViewModel by viewModels()
 
     private val askPermissions = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) {
-        try {
-            startAstralService()
-        } catch (e: Throwable) {
-            e.printStackTrace()
-            model.errors += e
-        }
+        tryStartAstralService()
     }
-
-    private val model: MainModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,17 +32,19 @@ class MainActivity : ComponentActivity() {
             askPermissions.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         }
 
-        try {
-            startAstralService()
-        } catch (e: Throwable) {
-            e.printStackTrace()
-            model.errors += e
-        }
+        tryStartAstralService()
         setContent {
-            Main(
-                jsAppsManager = jsAppsManager,
-                model = model,
+            MainScreen(
+                errors = errors,
+                jsAppsManager = remember { use<JsAppsManager.Provider>().jsAppsManager },
             )
         }
+    }
+
+    private fun tryStartAstralService() = try {
+        startAstralService()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        errors.state += e
     }
 }

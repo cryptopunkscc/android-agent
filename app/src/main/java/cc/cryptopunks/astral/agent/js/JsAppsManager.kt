@@ -1,4 +1,4 @@
-package cc.cryptopunks.astral.agent
+package cc.cryptopunks.astral.agent.js
 
 import android.app.Application
 import android.content.Context
@@ -6,6 +6,8 @@ import android.net.Uri
 import android.util.Log
 import astral.Astral
 import astral.Worker
+import cc.cryptopunks.astral.agent.util.UnpackZipException
+import cc.cryptopunks.astral.agent.util.unpackZip
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -15,16 +17,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.UUID
-
-data class JsApp(
-    val name: String,
-    val dir: String,
-    val description: String = "",
-    val icon: String? = null,
-    val service: String? = null,
-)
-
-val Context.appsDir get() = dataDir.resolve("apps")
 
 class JsAppsManager(
     private val context: Application,
@@ -39,9 +31,13 @@ class JsAppsManager(
         context.appsDir.mkdirs()
     }
 
-    val apps: StateFlow<List<JsApp>> get() = _apps
+    internal val apps: StateFlow<List<JsApp>> get() = _apps
 
-    fun startServices() {
+    private operator fun get(name: String): JsApp? {
+        return _apps.value.find { it.name == name }
+    }
+
+    internal fun startServices() {
         _apps.value.filterNot { app ->
             running[app.name]?.isActive == true
         }.forEach { app ->
@@ -49,7 +45,7 @@ class JsAppsManager(
         }
     }
 
-    fun stopServices() {
+    internal fun stopServices() {
         _apps.value.filter { app ->
             running[app.name]?.isActive == true
         }.forEach { app ->
@@ -61,7 +57,7 @@ class JsAppsManager(
         FileNotFoundException::class,
         UnpackZipException::class,
     )
-    fun install(uri: Uri): JsApp {
+    internal fun install(uri: Uri): JsApp {
         val appsDir = context.appsDir
 
         // Resolve stream from bundle uri
@@ -123,11 +119,7 @@ class JsAppsManager(
         return app
     }
 
-    operator fun get(name: String): JsApp? {
-        return _apps.value.find { it.name == name }
-    }
-
-    fun startService(name: String) {
+    private fun startService(name: String) {
         running[name]?.isActive == true && return
         val app = get(name) ?: return
         app.service ?: return
@@ -142,13 +134,7 @@ class JsAppsManager(
         }
     }
 
-    fun stopService(name: String) {
-        val job = running.remove(name) ?: return
-        job.cancel()
-        Log.d(tag, "stopped service $name")
-    }
-
-    fun uninstall(name: String) {
+    internal fun uninstall(name: String) {
         val app = get(name) ?: return
 
         // cancel running service
@@ -165,6 +151,16 @@ class JsAppsManager(
             }
         }
         Log.d(tag, "uninstalled js app $name")
+    }
+
+    private fun stopService(name: String) {
+        val job = running.remove(name) ?: return
+        job.cancel()
+        Log.d(tag, "stopped service $name")
+    }
+
+    interface Provider {
+        val jsAppsManager: JsAppsManager
     }
 }
 

@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,11 +37,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.ViewModel
+import java.lang.Exception
 
+class ErrorViewModel : ViewModel() {
+    val state = mutableStateListOf<Throwable>()
+}
+
+infix fun MutableList<Throwable>.catch(block: () -> Unit) {
+    try {
+        block()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        this += e
+    }
+}
 
 @Preview
 @Composable
-fun ErrorsPreview() = AstralTheme {
+private fun ErrorsPreview() = AstralTheme {
     val message = "Test error preview, with some long description, that will overflow in dialog, so the UI can be adjusted."
     Errors(errors = mutableListOf(Throwable(message)))
 }
@@ -111,13 +126,13 @@ fun Errors(
 
 @Preview
 @Composable
-fun StackTracePreview() = AstralTheme {
+private fun StackTracePreview() = AstralTheme {
     val message = "Test error preview, with some long description, that will overflow in dialog, so the UI can be adjusted."
     StackTrace(err = Throwable(message))
 }
 
 @Composable
-fun StackTrace(
+private fun StackTrace(
     err: Throwable,
     dismiss: () -> Unit = {}
 ) {

@@ -1,4 +1,4 @@
-package cc.cryptopunks.astral.agent.compose
+package cc.cryptopunks.astral.agent.main
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
@@ -21,18 +21,16 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import cc.cryptopunks.astral.agent.AstralStatus
 import cc.cryptopunks.astral.agent.R
-import cc.cryptopunks.astral.agent.astralStatus
-import cc.cryptopunks.astral.agent.startAstralService
-import cc.cryptopunks.astral.agent.stopAstralService
+import cc.cryptopunks.astral.agent.node.AstralStatus
+import cc.cryptopunks.astral.agent.node.astralStatus
 
 
 @Composable
-fun AstralToggle() {
+fun MainServiceToggle() {
     val status by astralStatus.collectAsState()
     val context = LocalContext.current
-    AstralToggle(status) {
+    MainServiceToggle(status) {
         when (status) {
             AstralStatus.Stopped -> context.startAstralService()
             AstralStatus.Started -> context.stopAstralService()
@@ -43,9 +41,9 @@ fun AstralToggle() {
 
 @Preview
 @Composable
-fun AstralTogglePreview() {
+fun MainServiceTogglePreview() {
     var status by remember { mutableStateOf(AstralStatus.Starting) }
-    AstralToggle(
+    MainServiceToggle(
         status = status,
         enabled = true,
     ) {
@@ -56,7 +54,7 @@ fun AstralTogglePreview() {
 }
 
 @Composable
-fun AstralToggle(
+fun MainServiceToggle(
     status: AstralStatus,
     enabled: Boolean = status != AstralStatus.Starting,
     onClick: () -> Unit,

@@ -1,4 +1,4 @@
-package cc.cryptopunks.astral.agent
+package cc.cryptopunks.astral.agent.node
 
 import android.content.Context
 import android.util.Log
@@ -17,30 +17,44 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
-import java.io.File
 import java.util.concurrent.Executors
 import kotlin.time.Duration.Companion.seconds
 
-const val ASTRAL = "Astral"
+enum class AstralStatus { Starting, Started, Stopped }
 
 private val executor = Executors.newSingleThreadExecutor()
 
 private val scope = CoroutineScope(SupervisorJob() + executor.asCoroutineDispatcher())
 
-private var astralJob: Job = Job().apply { complete() }
+private val status = MutableStateFlow(AstralStatus.Stopped)
 
 private val identity = CompletableDeferred<String>()
 
-private val status = MutableStateFlow(AstralStatus.Stopped)
+private var astralJob: Job = Job().apply { complete() }
 
-val Context.astralDir get() = File(applicationInfo.dataDir)
-
+/**
+ * A time when the node was started.
+ */
 var startTime: Long = 0; private set
 
+/**
+ * Current [AstralStatus].
+ */
 val astralStatus: StateFlow<AstralStatus> get() = status
 
-enum class AstralStatus { Starting, Started, Stopped }
+/**
+ * Astrald main directory.
+ */
+val Context.astralDir get() = dataDir.resolve("astrald").apply { mkdirs() }
 
+/**
+ * Local node identity.
+ */
+suspend fun astralIdentity() = identity.await()
+
+/**
+ * Start astrald in background.
+ */
 fun Context.startAstral() {
     if (status.value == AstralStatus.Stopped) {
         startTime = System.currentTimeMillis()
@@ -50,15 +64,7 @@ fun Context.startAstral() {
         astralJob = scope.launch {
             val multicastLock = acquireMulticastWakeLock()
             try {
-                createApphostConfig()
-                val dir = astralDir.absolutePath
-//                val handlers = Handlers.from(resolveMethods())
-//                val bluetooth = Bluetooth()
-                Astral.start(
-                    dir,
-//                    handlers,
-//                    bluetooth,
-                )
+                Astral.start(astralDir.absolutePath)
             } catch (e: Throwable) {
                 e.printStackTrace()
             } finally {
@@ -81,6 +87,9 @@ fun Context.startAstral() {
     }
 }
 
+/**
+ * Stop astrald if running.
+ */
 fun stopAstral() = runBlocking {
     val status = withTimeoutOrNull(5.seconds) {
         status.first { it != AstralStatus.Starting }
@@ -90,16 +99,3 @@ fun stopAstral() = runBlocking {
         astralJob.join()
     }
 }
-
-suspend fun astralIdentity() = identity.await()
-
-fun Context.createApphostConfig() {
-    astralDir.resolve("astrald").apply {
-        mkdirs()
-        resolve("mod_apphost.yaml").writeText(modApphostConfig)
-    }
-}
-
-private val modApphostConfig = """
-allow_anonymous: true    
-""".trimIndent()

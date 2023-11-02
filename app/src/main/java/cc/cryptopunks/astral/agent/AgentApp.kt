@@ -1,12 +1,17 @@
 package cc.cryptopunks.astral.agent
 
 import android.app.Application
+import cc.cryptopunks.astral.agent.config.createApphostConfig
+import cc.cryptopunks.astral.agent.js.JsAppsManager
 
-lateinit var jsAppsManager: JsAppsManager private set
+class AgentApp :
+    JsAppsManager.Provider,
+    Application() {
 
-class AgentApp : Application() {
+    override val jsAppsManager by lazy { JsAppsManager(this) }
+
     override fun onCreate() {
         super.onCreate()
-        jsAppsManager = JsAppsManager(this)
+        createApphostConfig()
     }
 }

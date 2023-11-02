@@ -1,10 +1,15 @@
-package cc.cryptopunks.astral.agent
+package cc.cryptopunks.astral.agent.main
 
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import cc.cryptopunks.astral.agent.js.JsAppsManager
+import cc.cryptopunks.astral.agent.node.AstralStatus
+import cc.cryptopunks.astral.agent.node.astralStatus
+import cc.cryptopunks.astral.agent.node.startAstral
+import cc.cryptopunks.astral.agent.node.stopAstral
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -17,11 +22,12 @@ class AstraldService : Service(), CoroutineScope {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
-    private val tag = ASTRAL + "Service"
+    private val jsAppsManager get() = (application as JsAppsManager.Provider).jsAppsManager
+
+    private val tag = javaClass.simpleName
 
     override fun onCreate() {
         Log.d(tag, "onCreate")
-        loadAstralConfig()
 
         launch {
             Log.d(tag, "Starting astral service")
@@ -69,7 +75,7 @@ class AstraldService : Service(), CoroutineScope {
     override fun onBind(intent: Intent) = null
 }
 
-fun Context.startAstralService() {
+internal fun Context.startAstralService() {
     val intent = Intent(this, AstraldService::class.java)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         startForegroundService(intent)

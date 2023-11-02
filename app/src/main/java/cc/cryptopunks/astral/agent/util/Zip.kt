@@ -1,4 +1,4 @@
-package cc.cryptopunks.astral.agent
+package cc.cryptopunks.astral.agent.util
 
 import java.io.BufferedInputStream
 import java.io.File
