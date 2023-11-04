@@ -2,7 +2,6 @@ package cc.cryptopunks.astral.agent.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
@@ -33,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlin.random.Random
@@ -129,23 +128,20 @@ fun <T> EditableItemList(
             title = { Text(text = "Confirm deleting") },
             text = { content(it) },
             onDismissRequest = dismiss,
-            buttons = {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Button(onClick = {
-                        dismiss()
-                        onRemoveClick(it)
-                    }) {
-                        Text(text = "OK")
-                    }
-                    Spacer(modifier = Modifier.size(32.dp))
-                    Button(onClick = dismiss) {
-                        Text(text = "Cancel")
-                    }
+            backgroundColor = Color.DarkGray,
+            confirmButton = {
+                Button(onClick = {
+                    dismiss()
+                    onRemoveClick(it)
+                }) {
+                    Text(text = "OK")
                 }
-            }
+            },
+            dismissButton = {
+                Button(onClick = dismiss) {
+                    Text(text = "Cancel")
+                }
+            },
         )
     }
 }

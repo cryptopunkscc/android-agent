@@ -16,9 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cc.cryptopunks.astral.agent.compose.AstralTheme
 import cc.cryptopunks.astral.agent.compose.EditableItemList
-import cc.cryptopunks.astral.agent.compose.catch
+import cc.cryptopunks.astral.agent.exception.catch
 import org.koin.compose.koinInject
 
 @Composable
@@ -33,7 +32,7 @@ fun JsAppsScreen(
         JsApps(
             apps = apps,
             startClick = {
-                errors catch {
+                errors catch  {
                     context.startJsAppActivity(it)
                 }
             },
@@ -53,7 +52,7 @@ fun JsAppsScreen(
 
 @Preview
 @Composable
-private fun JsAppsPreview() = AstralTheme {
+private fun JsAppsPreview() {
     JsApps(
         apps = listOf(
             JsApp("Some example app", "", description = "Some example description"),

@@ -1,4 +1,4 @@
-package cc.cryptopunks.astral.agent.util
+package cc.cryptopunks.astral.agent.js
 
 import java.io.BufferedInputStream
 import java.io.File
@@ -7,7 +7,7 @@ import java.io.InputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-fun unpackZip(inputStream: InputStream, outputDir: File): Unit = try {
+internal fun unpackZip(inputStream: InputStream, outputDir: File): Unit = try {
     outputDir.mkdirs()
 
     ZipInputStream(BufferedInputStream(inputStream)).use { zis ->
@@ -43,4 +43,4 @@ fun unpackZip(inputStream: InputStream, outputDir: File): Unit = try {
     throw UnpackZipException(e)
 }
 
-class UnpackZipException(cause: Throwable) : IOException(cause.message, cause)
+internal class UnpackZipException(cause: Throwable) : IOException(cause.message, cause)

@@ -85,7 +85,7 @@ internal fun Context.startAstralService() {
     }
 }
 
-fun Context.stopAstralService() {
+internal fun Context.stopAstralService() {
     val intent = Intent(this, AstraldService::class.java)
     stopService(intent)
 }

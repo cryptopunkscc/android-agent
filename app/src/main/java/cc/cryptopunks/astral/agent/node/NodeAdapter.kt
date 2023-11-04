@@ -64,6 +64,7 @@ fun Context.startAstral() {
         astralJob = scope.launch {
             val multicastLock = acquireMulticastWakeLock()
             try {
+                createApphostConfig()
                 Astral.start(astralDir.absolutePath)
             } catch (e: Throwable) {
                 e.printStackTrace()
