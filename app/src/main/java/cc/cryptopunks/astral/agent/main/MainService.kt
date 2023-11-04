@@ -17,12 +17,13 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class AstraldService : Service(), CoroutineScope {
 
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
-    private val jsAppsManager get() = (application as JsAppsManager.Provider).jsAppsManager
+    private val jsAppsManager: JsAppsManager by inject()
 
     private val tag = javaClass.simpleName
 

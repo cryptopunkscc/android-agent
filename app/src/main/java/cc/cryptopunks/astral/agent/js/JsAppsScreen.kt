@@ -19,12 +19,13 @@ import androidx.compose.ui.unit.dp
 import cc.cryptopunks.astral.agent.compose.AstralTheme
 import cc.cryptopunks.astral.agent.compose.EditableItemList
 import cc.cryptopunks.astral.agent.compose.catch
+import org.koin.compose.koinInject
 
 @Composable
 fun JsAppsScreen(
-    errors: MutableList<Throwable>,
-    jsAppsManager: JsAppsManager,
     modifier: Modifier = Modifier,
+    errors: MutableList<Throwable> = koinInject(),
+    jsAppsManager: JsAppsManager = koinInject(),
 ) {
     Box(modifier = modifier) {
         val context = LocalContext.current

@@ -7,16 +7,11 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import cc.cryptopunks.astral.agent.compose.AstralTheme
-import cc.cryptopunks.astral.agent.compose.ErrorViewModel
 import cc.cryptopunks.astral.agent.compose.Errors
-import cc.cryptopunks.astral.agent.js.JsAppsManager
 import cc.cryptopunks.astral.agent.js.JsAppsScreen
 
 @Composable
-fun MainScreen(
-    errors: ErrorViewModel,
-    jsAppsManager: JsAppsManager,
-) {
+fun MainScreen() {
     AstralTheme {
         Scaffold(
             topBar = {
@@ -27,12 +22,10 @@ fun MainScreen(
             },
             content = { paddingValues ->
                 JsAppsScreen(
-                    errors = errors.state,
-                    jsAppsManager = jsAppsManager,
                     modifier = Modifier.padding(paddingValues),
                 )
-                Errors(errors.state)
             },
         )
+        Errors()
     }
 }

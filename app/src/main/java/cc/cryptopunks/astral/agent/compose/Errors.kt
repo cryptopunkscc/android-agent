@@ -37,12 +37,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.ViewModel
-import java.lang.Exception
+import org.koin.compose.koinInject
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-class ErrorViewModel : ViewModel() {
-    val state = mutableStateListOf<Throwable>()
+val errorsModule = module {
+    single { mutableStateListOf<Throwable>() }.bind<ErrorsState>()
 }
+
+internal typealias ErrorsState = MutableList<Throwable>
 
 infix fun MutableList<Throwable>.catch(block: () -> Unit) {
     try {
@@ -62,7 +65,7 @@ private fun ErrorsPreview() = AstralTheme {
 
 @Composable
 fun Errors(
-    errors: MutableList<Throwable>,
+    errors: MutableList<Throwable> = koinInject(),
 ) {
     errors.forEachIndexed { index, err ->
         err.printStackTrace()
@@ -75,7 +78,8 @@ fun Errors(
         val clipboard = LocalClipboardManager.current
         Dialog(drop) {
             Surface(
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(16.dp),
+                elevation = 4.dp,
             ) {
                 Column(Modifier.padding(16.dp)) {
                     Text(

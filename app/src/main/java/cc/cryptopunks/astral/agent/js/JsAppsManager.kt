@@ -19,7 +19,7 @@ import java.io.IOException
 import java.util.UUID
 
 class JsAppsManager(
-    private val context: Application,
+    private val context: Context,
 ) {
     private val tag = javaClass.simpleName
 
@@ -157,10 +157,6 @@ class JsAppsManager(
         val job = running.remove(name) ?: return
         job.cancel()
         Log.d(tag, "stopped service $name")
-    }
-
-    interface Provider {
-        val jsAppsManager: JsAppsManager
     }
 }
 

@@ -6,16 +6,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
-import androidx.compose.runtime.remember
-import cc.cryptopunks.astral.agent.compose.ErrorViewModel
-import cc.cryptopunks.astral.agent.js.JsAppsManager
-import cc.cryptopunks.astral.agent.util.use
-import java.lang.Exception
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
-    private val errors: ErrorViewModel by viewModels()
+    private val errors: MutableList<Throwable> by inject()
 
     private val askPermissions = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -34,10 +29,7 @@ class MainActivity : ComponentActivity() {
 
         tryStartAstralService()
         setContent {
-            MainScreen(
-                errors = errors,
-                jsAppsManager = remember { use<JsAppsManager.Provider>().jsAppsManager },
-            )
+            MainScreen()
         }
     }
 
@@ -45,6 +37,6 @@ class MainActivity : ComponentActivity() {
         startAstralService()
     } catch (e: Exception) {
         e.printStackTrace()
-        errors.state += e
+        errors += e
     }
 }
