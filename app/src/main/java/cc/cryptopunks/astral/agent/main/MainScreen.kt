@@ -2,6 +2,7 @@ package cc.cryptopunks.astral.agent.main
 
 import android.net.Uri
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
@@ -10,6 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import cc.cryptopunks.astral.agent.admin.AdminScreen
+import cc.cryptopunks.astral.agent.admin.AdminWrapToggle
 import cc.cryptopunks.astral.agent.compose.AstralTheme
 import cc.cryptopunks.astral.agent.config.ConfigEditorScreen
 import cc.cryptopunks.astral.agent.config.ConfigScreen
@@ -45,6 +48,10 @@ fun MainScreen() {
                                     val route = "config_editor/${Uri.encode(file.absolutePath)}"
                                     mainNavController.navigate(route)
                                 }
+                            },
+                            DashboardItem("admin", Icons.Default.Face,
+                                actions = { AdminWrapToggle() }) {
+                                AdminScreen()
                             },
                             DashboardItem("apps", Icons.Default.PlayArrow) {
                                 JsAppsScreen()

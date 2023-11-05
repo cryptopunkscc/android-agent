@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import cc.cryptopunks.astral.agent.admin.AdminClient
 import cc.cryptopunks.astral.agent.js.JsAppsManager
 import cc.cryptopunks.astral.agent.node.AstralStatus
 import cc.cryptopunks.astral.agent.node.astralStatus
@@ -15,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -24,6 +24,7 @@ class AstraldService : Service(), CoroutineScope {
     override val coroutineContext = SupervisorJob() + Dispatchers.IO
 
     private val jsAppsManager: JsAppsManager by inject()
+    private val adminClient: AdminClient by inject()
 
     private val tag = javaClass.simpleName
 
@@ -33,15 +34,9 @@ class AstraldService : Service(), CoroutineScope {
         launch {
             Log.d(tag, "Starting astral service")
             startAstral()
-        }
-
-        launch {
-            astralStatus.filter { status ->
-                status == AstralStatus.Started
-            }.collect {
-                delay(200)
-                jsAppsManager.startServices()
-            }
+            delay(200)
+            jsAppsManager.startServices()
+            adminClient.connect()
         }
     }
 

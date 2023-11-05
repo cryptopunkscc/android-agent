@@ -1,12 +1,12 @@
-package cc.cryptopunks.astral.agent.log
+package cc.cryptopunks.astral.agent.admin
 
 import androidx.compose.runtime.Composable
 import cc.cryptopunks.astral.agent.compose.SoftWrapToggle
 import org.koin.compose.koinInject
 
 @Composable
-fun LogWrapToggle(
-    preferences: LogPreferences = koinInject(),
+fun AdminWrapToggle(
+    preferences: AdminPreferences = koinInject(),
 ) = SoftWrapToggle(
-    preferences.softWrap,
+    state = preferences.softWrap,
 )

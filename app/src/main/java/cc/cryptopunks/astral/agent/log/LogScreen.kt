@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
@@ -26,6 +27,7 @@ fun LogScreen(
     val text by model.logText.collectAsState()
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
+    val softWrap by preferences.softWrap
     if (!scrollState.canScrollForward) LaunchedEffect(text.length) {
         scope.launch {
             scrollState.scrollBy(scrollState.scrollBy(Float.MAX_VALUE))
@@ -35,7 +37,7 @@ fun LogScreen(
         scrollState.scrollBy(scrollState.scrollBy(Float.MAX_VALUE))
     }
     Box(
-        modifier = if (preferences.softWrap) Modifier else Modifier
+        modifier = if (softWrap) Modifier else Modifier
             .fillMaxSize()
             .horizontalScroll(rememberScrollState()),
     ) {
@@ -45,7 +47,8 @@ fun LogScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState),
-                softWrap = preferences.softWrap,
+                softWrap = softWrap,
+                fontFamily = FontFamily.Monospace,
             )
         }
     }
