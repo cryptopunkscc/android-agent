@@ -2,6 +2,7 @@ package cc.cryptopunks.astral.agent.main
 
 import android.net.Uri
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -10,12 +11,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cc.cryptopunks.astral.agent.compose.AstralTheme
-import cc.cryptopunks.astral.agent.exception.ErrorsScreen
 import cc.cryptopunks.astral.agent.config.ConfigEditorScreen
 import cc.cryptopunks.astral.agent.config.ConfigScreen
 import cc.cryptopunks.astral.agent.dashboard.DashboardItem
 import cc.cryptopunks.astral.agent.dashboard.DashboardScreen
+import cc.cryptopunks.astral.agent.exception.ErrorsScreen
 import cc.cryptopunks.astral.agent.js.JsAppsScreen
+import cc.cryptopunks.astral.agent.log.LogScreen
+import cc.cryptopunks.astral.agent.log.LogWrapToggle
 
 @Composable
 fun MainScreen() {
@@ -32,6 +35,11 @@ fun MainScreen() {
                     actions = { MainServiceToggle() },
                     items = remember {
                         listOf(
+                            DashboardItem("log", Icons.Default.List,
+                                actions = { LogWrapToggle() }
+                            ) {
+                                LogScreen()
+                            },
                             DashboardItem("config", Icons.Default.Settings) {
                                 ConfigScreen { file ->
                                     val route = "config_editor/${Uri.encode(file.absolutePath)}"
@@ -42,7 +50,7 @@ fun MainScreen() {
                                 JsAppsScreen()
                             },
                         )
-                    }
+                    },
                 )
             }
             composable("config_editor/{file}") {

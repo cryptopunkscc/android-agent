@@ -64,14 +64,18 @@ fun Context.startAstral() {
         astralJob = scope.launch {
             val multicastLock = acquireMulticastWakeLock()
             try {
+                backupLog()
                 createApphostConfig()
+                createLogConfig()
                 Astral.start(astralDir.absolutePath)
             } catch (e: Throwable) {
                 e.printStackTrace()
+                log(e.stackTraceToString())
             } finally {
                 status.value = AstralStatus.Stopped
                 Log.d("AstralNetwork", "releasing multicast")
                 multicastLock.release()
+                backupLog()
             }
         }
 

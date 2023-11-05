@@ -1,14 +1,17 @@
 package cc.cryptopunks.astral.agent.config
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cc.cryptopunks.astral.agent.node.astralDir
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
-import java.io.File
 
 class ConfigViewModel(
-    private val dir: File,
+    context: Context,
 ) : ViewModel() {
+
+    private val dir = context.astralDir
 
     val files = dir.flowFiles()
         .filterExtension(YamlExtension)

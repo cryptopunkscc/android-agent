@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 data class DashboardItem(
     override val label: String,
     override val icon: ImageVector,
+    override val actions: @Composable RowScope.() -> Unit = {},
     override val content: @Composable () -> Unit,
 ) : DashboardBottomItem, DashboardScreenItem {
 
@@ -39,6 +40,7 @@ interface DashboardBottomItem {
 }
 
 interface DashboardScreenItem {
+    val actions: @Composable RowScope.() -> Unit
     val content: @Composable () -> Unit
 }
 
@@ -63,7 +65,7 @@ fun DashboardScreen(
     items: List<DashboardItem>,
     actions: @Composable RowScope.() -> Unit = { },
 ) {
-
+    var selected by remember { mutableStateOf(items.first()) }
     val onSelect = { item: DashboardItem ->
         val currentRoute = navController.currentDestination?.route
         if (currentRoute != null)
@@ -77,7 +79,10 @@ fun DashboardScreen(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Astral Agent") },
-                actions = actions,
+                actions = {
+                    selected.actions(this)
+                    actions()
+                },
             )
         },
         content = { paddingValues ->
@@ -94,7 +99,6 @@ fun DashboardScreen(
             }
         },
         bottomBar = {
-            var selected by remember { mutableStateOf(items.first()) }
             BottomNavigation {
                 items.forEach { item ->
                     BottomNavigationItem(
