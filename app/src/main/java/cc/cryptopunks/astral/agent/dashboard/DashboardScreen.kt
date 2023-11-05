@@ -13,8 +13,9 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -54,7 +55,8 @@ fun DashboardScreenPreview() {
                 DashboardItem("config", Icons.Default.Settings) {},
                 DashboardItem("apps", Icons.Default.PlayArrow) {},
             )
-        }
+        },
+        showBars = true
     )
 }
 
@@ -63,9 +65,10 @@ fun DashboardScreenPreview() {
 fun DashboardScreen(
     navController: NavHostController = rememberNavController(),
     items: List<DashboardItem>,
-    actions: @Composable RowScope.() -> Unit = { },
+    actions: @Composable (RowScope.() -> Unit) = { },
+    showBars: Boolean,
 ) {
-    var selected by remember { mutableStateOf(items.first()) }
+    var selected by rememberSaveable { mutableIntStateOf(0) }
     val onSelect = { item: DashboardItem ->
         val currentRoute = navController.currentDestination?.route
         if (currentRoute != null)
@@ -77,10 +80,10 @@ fun DashboardScreen(
     }
     Scaffold(
         topBar = {
-            TopAppBar(
+            if (showBars) TopAppBar(
                 title = { Text(text = "Astral Agent") },
                 actions = {
-                    selected.actions(this)
+                    items[selected].actions(this)
                     actions()
                 },
             )
@@ -89,7 +92,7 @@ fun DashboardScreen(
             NavHost(
                 modifier = Modifier.padding(paddingValues),
                 navController = navController,
-                startDestination = items.first().route,
+                startDestination = items[selected].route,
             ) {
                 items.forEach { item ->
                     composable(item.route) {
@@ -99,12 +102,12 @@ fun DashboardScreen(
             }
         },
         bottomBar = {
-            BottomNavigation {
-                items.forEach { item ->
+            if (showBars) BottomNavigation {
+                items.forEachIndexed { index, item ->
                     BottomNavigationItem(
-                        selected = selected == item,
+                        selected = selected == index,
                         onClick = {
-                            selected = item
+                            selected = index
                             onSelect(item)
                         },
                         icon = { Icon(imageVector = item.icon, contentDescription = "") },

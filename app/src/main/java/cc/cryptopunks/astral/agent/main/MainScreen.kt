@@ -1,13 +1,17 @@
 package cc.cryptopunks.astral.agent.main
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -28,14 +32,15 @@ fun MainScreen() {
     AstralTheme {
         val mainNavController = rememberNavController()
         val dashboardNavController = rememberNavController()
+        var showBars by remember { mutableStateOf(true) }
         NavHost(
-            navController = mainNavController,
-            startDestination = "dashboard"
+            navController = mainNavController, startDestination = "dashboard"
         ) {
             composable("dashboard") {
                 DashboardScreen(
                     navController = dashboardNavController,
                     actions = { MainServiceToggle() },
+                    showBars = showBars,
                     items = remember {
                         listOf(
                             DashboardItem("log", Icons.Default.List,
@@ -50,7 +55,11 @@ fun MainScreen() {
                                 }
                             },
                             DashboardItem("admin", Icons.Default.Face,
-                                actions = { AdminWrapToggle() }) {
+                                actions = {
+                                    MainBarToggle { showBars = false }
+                                    AdminWrapToggle()
+                                }
+                            ) {
                                 AdminScreen()
                             },
                             DashboardItem("apps", Icons.Default.PlayArrow) {
@@ -59,6 +68,9 @@ fun MainScreen() {
                         )
                     },
                 )
+                BackHandler(!showBars) {
+                    showBars = true
+                }
             }
             composable("config_editor/{file}") {
                 ConfigEditorScreen(mainNavController)
