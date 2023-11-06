@@ -10,6 +10,9 @@
 * WebView runner for js app frontend
 * Apphost support via js adapter
 * Installing js app from zip bundle
+* Node log screen
+* Node config editor
+* Admin panel console
 
 ## Dev dependencies
 
