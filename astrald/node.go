@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/cryptopunkscc/astrald/node"
+	"github.com/cryptopunkscc/astrald/node/assets"
+	"gorm.io/driver/sqlite"
 	"log"
 	"os"
 	"time"
@@ -27,6 +29,7 @@ func Start(
 	ctx, stop = context.WithCancel(context.Background())
 
 	// start the node
+	assets.SqliteOpen = sqlite.Open
 	if n, err = node.NewCoreNode(astralRoot); err != nil {
 		err = fmt.Errorf("init error: %v", err)
 		return

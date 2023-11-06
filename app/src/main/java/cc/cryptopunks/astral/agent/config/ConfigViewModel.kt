@@ -2,10 +2,10 @@ package cc.cryptopunks.astral.agent.config
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import cc.cryptopunks.astral.agent.node.astralDir
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import java.io.File
 
 class ConfigViewModel(
     context: Context,
@@ -13,11 +13,19 @@ class ConfigViewModel(
 
     private val dir = context.astralDir
 
-    val files = dir.flowFiles()
-        .filterExtension(YamlExtension)
-        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    private val filesState = MutableStateFlow(emptyList<File>())
 
-    fun create(name: String) = dir.resolve("$name.yaml").createNewFile()
+    init {
+        updateFiles()
+    }
 
-    fun remove(name: String) = dir.resolve(name).delete()
+    val files = filesState.asStateFlow()
+
+    fun create(name: String) = dir.resolve("$name.yaml").createNewFile().also { updateFiles() }
+
+    fun remove(name: String) = dir.resolve(name).delete().also { updateFiles() }
+
+    private fun updateFiles() {
+        filesState.value = dir.listFiles().orEmpty().toList().filterExtension(YamlExtension)
+    }
 }

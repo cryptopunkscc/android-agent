@@ -34,6 +34,6 @@ require (
 	gorm.io/gorm v1.25.4 // indirect
 )
 
-//replace github.com/cryptopunkscc/astrald => ../../astrald
+replace github.com/cryptopunkscc/astrald => ../../astrald
 
 //replace github.com/cryptopunkscc/go-astral-js => ../../go-astral-js

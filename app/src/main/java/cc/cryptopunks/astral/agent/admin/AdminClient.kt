@@ -46,4 +46,4 @@ class AdminClient(
 
 private fun String.clearFormatting() = replace(formattingRegex, "")
 
-private val formattingRegex = Regex("""\[\d+m""")
+private val formattingRegex = Regex("""\[\d+m|""")
