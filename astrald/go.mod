@@ -3,8 +3,9 @@ module github.com/cryptopunkscc/android-astral-agent
 go 1.21
 
 require (
-	github.com/cryptopunkscc/astrald v0.0.0-20231108194640-050800492000
+	github.com/cryptopunkscc/astrald v0.0.0-20231108225739-2ce814966a96
 	github.com/cryptopunkscc/go-astral-js v0.0.0-20230726002531-773c2522c739
+	github.com/cryptopunkscc/go-warpdrive v0.0.0-20231108172647-3eb8e9a7d993
 	github.com/dop251/goja v0.0.0-20230707174833-636fdf960de1
 	gorm.io/driver/sqlite v1.5.4
 )
@@ -25,10 +26,12 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jxskiss/base62 v1.1.0 // indirect
-	github.com/kr/pretty v0.3.1 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/mattn/go-sqlite3 v1.14.17 // indirect
+	github.com/mitchellh/ioprogress v0.0.0-20180201004757-6a23b12fa88e // indirect
+	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
+	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/mobile v0.0.0-20231006135142-2b44d11868fe // indirect
 	golang.org/x/mod v0.13.0 // indirect
@@ -47,3 +50,5 @@ require (
 replace github.com/cryptopunkscc/astrald => ../../astrald
 
 replace github.com/cryptopunkscc/go-astral-js => ../../go-astral-js
+
+replace github.com/cryptopunkscc/go-warpdrive => ../../go-warpdrive

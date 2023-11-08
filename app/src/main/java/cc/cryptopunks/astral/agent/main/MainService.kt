@@ -7,10 +7,10 @@ import android.os.Build
 import android.util.Log
 import cc.cryptopunks.astral.agent.admin.AdminClient
 import cc.cryptopunks.astral.agent.js.JsAppsManager
-import cc.cryptopunks.astral.agent.node.AstralStatus
-import cc.cryptopunks.astral.agent.node.astralStatus
 import cc.cryptopunks.astral.agent.node.startAstral
 import cc.cryptopunks.astral.agent.node.stopAstral
+import cc.cryptopunks.astral.agent.warpdrive.startWarpdrive
+import cc.cryptopunks.astral.agent.warpdrive.stopWarpdrive
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -35,6 +35,7 @@ class AstraldService : Service(), CoroutineScope {
             Log.d(tag, "Starting astral service")
             startAstral()
             delay(200)
+            startWarpdrive()
             jsAppsManager.startServices()
             adminClient.connect()
         }
@@ -54,11 +55,10 @@ class AstraldService : Service(), CoroutineScope {
 
     override fun onDestroy() {
         stopForeground(STOP_FOREGROUND_REMOVE)
+        Log.d(tag, "Destroying astral service")
         jsAppsManager.stopServices()
-        if (astralStatus.value != AstralStatus.Stopped) {
-            Log.d(tag, "Destroying astral service")
-            stopAstral()
-        }
+        stopWarpdrive()
+        stopAstral()
         cancel()
     }
 
