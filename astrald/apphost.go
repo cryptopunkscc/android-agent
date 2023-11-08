@@ -89,5 +89,5 @@ func (client *AppHostClient) GetNodeInfo(identity string) (info *NodeInfo, err e
 type NodeInfo astraljs.NodeInfo
 
 func init() {
-	astral.Client = *astral.NewClient("tcp:127.0.0.1:8625", "")
+	astral.Client = *astral.NewClient("memu:apphost", "")
 }

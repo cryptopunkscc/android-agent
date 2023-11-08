@@ -3,7 +3,7 @@ module github.com/cryptopunkscc/android-astral-agent
 go 1.21
 
 require (
-	github.com/cryptopunkscc/astrald v0.0.0-20231107162829-13149c62ccca
+	github.com/cryptopunkscc/astrald v0.0.0-20231108194640-050800492000
 	github.com/cryptopunkscc/go-astral-js v0.0.0-20230726002531-773c2522c739
 	github.com/dop251/goja v0.0.0-20230707174833-636fdf960de1
 	gorm.io/driver/sqlite v1.5.4
@@ -11,6 +11,7 @@ require (
 
 require (
 	bitbucket.org/creachadair/shell v0.0.7 // indirect
+	github.com/akutz/memconn v0.1.0 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.1.3 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.1.0 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
