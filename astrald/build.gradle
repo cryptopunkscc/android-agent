@@ -21,6 +21,7 @@ task updateGoMobile(type: Exec) {
 
 task buildGoMobile(type: Exec) {
     group 'build'
+    dependsOn updateGoMobile
 //    dependsOn updateGoMobile, updateAstral
     inputs.files files("go.mod", 'go.sum'), fileTree("./") { include "*.go" }
     outputs.upToDateWhen {

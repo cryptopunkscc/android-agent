@@ -11,7 +11,6 @@ import (
 	"time"
 )
 
-var n *node.CoreNode
 var identity string
 var stop context.CancelFunc
 
@@ -21,15 +20,16 @@ func Start(
 	if err = os.MkdirAll(astralRoot, 0700); err != nil {
 		return
 	}
+	assets.DBOpener = sqlite.Open
 
-	log.Println("Staring astrald")
+	log.Println("astral staring")
 
 	// Set up app execution context
 	var ctx context.Context
 	ctx, stop = context.WithCancel(context.Background())
 
 	// start the node
-	assets.SqliteOpen = sqlite.Open
+	var n *node.CoreNode
 	if n, err = node.NewCoreNode(astralRoot); err != nil {
 		err = fmt.Errorf("init error: %v", err)
 		return
@@ -45,9 +45,9 @@ func Start(
 
 	time.Sleep(300 * time.Millisecond)
 
-	log.Println("Astral stopped")
+	log.Println("astral stopped")
 
-	return nil
+	return
 }
 
 func Identity() string {

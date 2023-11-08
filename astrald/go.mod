@@ -3,9 +3,10 @@ module github.com/cryptopunkscc/android-astral-agent
 go 1.21
 
 require (
-	github.com/cryptopunkscc/astrald v0.0.0-20231026142304-a14907705dfa
+	github.com/cryptopunkscc/astrald v0.0.0-20231107162829-13149c62ccca
 	github.com/cryptopunkscc/go-astral-js v0.0.0-20230726002531-773c2522c739
 	github.com/dop251/goja v0.0.0-20230707174833-636fdf960de1
+	gorm.io/driver/sqlite v1.5.4
 )
 
 require (
@@ -13,6 +14,9 @@ require (
 	github.com/btcsuite/btcd/btcec/v2 v2.1.3 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.1.0 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
+	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/glebarez/go-sqlite v1.21.2 // indirect
+	github.com/glebarez/sqlite v1.9.0 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/google/pprof v0.0.0-20230207041349-798e818bf904 // indirect
@@ -21,7 +25,9 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jxskiss/base62 v1.1.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
-	github.com/mattn/go-sqlite3 v1.14.16 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
+	github.com/mattn/go-sqlite3 v1.14.17 // indirect
+	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/mobile v0.0.0-20231006135142-2b44d11868fe // indirect
 	golang.org/x/mod v0.13.0 // indirect
@@ -30,10 +36,13 @@ require (
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/tools v0.14.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gorm.io/driver/sqlite v1.5.0 // indirect
-	gorm.io/gorm v1.25.4 // indirect
+	gorm.io/gorm v1.25.5 // indirect
+	modernc.org/libc v1.24.1 // indirect
+	modernc.org/mathutil v1.6.0 // indirect
+	modernc.org/memory v1.7.1 // indirect
+	modernc.org/sqlite v1.25.0 // indirect
 )
 
 replace github.com/cryptopunkscc/astrald => ../../astrald
 
-//replace github.com/cryptopunkscc/go-astral-js => ../../go-astral-js
+replace github.com/cryptopunkscc/go-astral-js => ../../go-astral-js
