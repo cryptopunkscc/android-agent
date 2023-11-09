@@ -8,10 +8,10 @@ import (
 	"log"
 )
 
-func RunGojaJsBackend(source string) *Worker {
-	ctx, cancel := context.WithCancel(context.Background())
-	go runGojaJsBackend(ctx, source)
-	return NewWorker(ctx, cancel)
+func RunGojaJsBackend(source string) (w *Worker) {
+	w = newWorker()
+	go runGojaJsBackend(w.ctx, source)
+	return
 }
 
 func runGojaJsBackend(ctx context.Context, source string) {
