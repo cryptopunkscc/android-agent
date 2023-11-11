@@ -1,6 +1,6 @@
 package cc.cryptopunks.astral.agent.admin
 
-import astral.AppHostClient
+import astral.JsAppHostClient
 import cc.cryptopunks.astral.agent.exception.ExceptionsState
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 
 class AdminClient(
-    private val client: AppHostClient,
+    private val client: JsAppHostClient,
     private val exceptions: ExceptionsState,
 ) {
     private var id = ""

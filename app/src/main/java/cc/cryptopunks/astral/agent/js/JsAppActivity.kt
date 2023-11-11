@@ -15,8 +15,8 @@ import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.core.net.toFile
-import astral.AppHostClient
 import astral.Astral
+import astral.JsAppHostClient
 import java.io.File
 
 internal fun Context.startJsAppActivity(app: JsApp) {
@@ -32,7 +32,7 @@ internal fun Context.startJsAppActivity(app: JsApp) {
 class JsAppActivity : ComponentActivity() {
 
     private val webView: WebView by lazy { WebView(this) }
-    private val appHostClient: AppHostClient by lazy { Astral.newAppHostClient() }
+    private val appHostClient: JsAppHostClient by lazy { Astral.newJsAppHostClient() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

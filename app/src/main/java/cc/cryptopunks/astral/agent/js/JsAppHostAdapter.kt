@@ -3,8 +3,8 @@ package cc.cryptopunks.astral.agent.js
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import astral.AppHostClient
 import astral.Astral
+import astral.JsAppHostClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -14,7 +14,7 @@ import java.util.UUID
 
 internal class JsAppHostAdapter(
     private val webView: WebView,
-    private val client: AppHostClient = Astral.newAppHostClient(),
+    private val client: JsAppHostClient = Astral.newJsAppHostClient(),
 ) : CoroutineScope {
 
     override val coroutineContext = SupervisorJob()
