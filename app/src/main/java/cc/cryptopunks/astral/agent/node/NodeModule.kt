@@ -6,4 +6,5 @@ import org.koin.dsl.module
 
 val nodeModule = module {
     factoryOf(Astral::newJsAppHostClient)
+    factoryOf(::AppHostClient)
 }
