@@ -7,6 +7,7 @@ import android.os.Build
 import android.util.Log
 import astral.HandlersWorker
 import cc.cryptopunks.astral.agent.admin.AdminClient
+import cc.cryptopunks.astral.agent.contacts.AstralLinksRepository
 import cc.cryptopunks.astral.agent.js.JsAppsManager
 import cc.cryptopunks.astral.agent.node.startAstral
 import cc.cryptopunks.astral.agent.node.stopAstral
@@ -18,6 +19,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 
 class AstraldService : Service(), CoroutineScope {
@@ -37,6 +39,7 @@ class AstraldService : Service(), CoroutineScope {
             Log.d(tag, "Starting astral service")
             startAstral()
             delay(200)
+            launch { get<AstralLinksRepository>().observe() }
             handlersWorker.startAsync()
             delay(200)
             startWarpdrive()

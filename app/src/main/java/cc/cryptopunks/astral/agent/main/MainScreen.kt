@@ -5,6 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import cc.cryptopunks.astral.agent.admin.AdminWrapToggle
 import cc.cryptopunks.astral.agent.compose.AstralTheme
 import cc.cryptopunks.astral.agent.config.ConfigEditorScreen
 import cc.cryptopunks.astral.agent.config.ConfigScreen
+import cc.cryptopunks.astral.agent.contacts.ContactsScreen
 import cc.cryptopunks.astral.agent.dashboard.DashboardItem
 import cc.cryptopunks.astral.agent.dashboard.DashboardScreen
 import cc.cryptopunks.astral.agent.exception.ErrorsScreen
@@ -64,6 +66,9 @@ fun MainScreen() {
                             },
                             DashboardItem("apps", Icons.Default.PlayArrow) {
                                 JsAppsScreen()
+                            },
+                            DashboardItem("contacts", Icons.Default.Person) {
+                                ContactsScreen()
                             },
                         )
                     },

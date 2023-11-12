@@ -12,7 +12,9 @@ internal class Conn(conn: astral.Conn) : astral.Conn by conn, AstralConn
 
 private class AppHostClientAdapter : AppHostClient {
     private val client: astral.AppHostClient = Astral.newApphostClient()
-    override fun query(nodeId: String, query: String) = Conn(client.query(nodeId, query))
+    override fun query(query: String, nodeId: String) =
+        Conn(client.query(nodeId.takeIf(String::isNotBlank) ?: client.resolve("localnode"), query))
+
     override fun register(name: String) = AppHostListenerAdapter(client.register(name))
     override fun resolve(name: String): String = client.resolve(name)
 }

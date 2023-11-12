@@ -1,7 +1,7 @@
 package cc.cryptopunks.astral.apphost
 
 interface AppHostClient {
-    fun query(nodeId: String, query: String): Conn
+    fun query(query: String, nodeId: String = ""): Conn
     fun register(name: String): ApphostListener
     fun resolve(name: String): String
 }
