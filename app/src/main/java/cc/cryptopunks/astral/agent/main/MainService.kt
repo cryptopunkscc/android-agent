@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import astral.HandlersWorker
 import cc.cryptopunks.astral.agent.admin.AdminClient
 import cc.cryptopunks.astral.agent.js.JsAppsManager
 import cc.cryptopunks.astral.agent.node.startAstral
@@ -25,6 +26,7 @@ class AstraldService : Service(), CoroutineScope {
 
     private val jsAppsManager: JsAppsManager by inject()
     private val adminClient: AdminClient by inject()
+    private val handlersWorker: HandlersWorker by inject()
 
     private val tag = javaClass.simpleName
 
@@ -34,6 +36,8 @@ class AstraldService : Service(), CoroutineScope {
         launch {
             Log.d(tag, "Starting astral service")
             startAstral()
+            delay(200)
+            handlersWorker.startAsync()
             delay(200)
             startWarpdrive()
             jsAppsManager.startServices()
@@ -58,6 +62,7 @@ class AstraldService : Service(), CoroutineScope {
         Log.d(tag, "Destroying astral service")
         jsAppsManager.stopServices()
         stopWarpdrive()
+        handlersWorker.cancel()
         stopAstral()
         cancel()
     }
