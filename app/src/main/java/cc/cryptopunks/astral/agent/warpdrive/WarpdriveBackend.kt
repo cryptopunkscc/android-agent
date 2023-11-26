@@ -24,14 +24,15 @@ private val status = MutableStateFlow(WarpdriveStatus.Stopped)
 
 private var warpdriveJob: Job = Job().apply { complete() }
 
-val Context.warpdriveDir get() = dataDir.resolve("warpdrive").apply { mkdirs() }
+private val Context.warpdriveDir get() = getDir("warpdrive", 0)
+private val Context.warpdriveCache get() = cacheDir.resolve("warpdrive").apply { mkdirs() }
 
 fun Context.startWarpdrive() {
     if (!warpdriveJob.isCompleted) return
     status.value = WarpdriveStatus.Starting
     warpdriveJob = scope.launch {
         try {
-            Astral.startWarpdrive(warpdriveDir.absolutePath)
+            Astral.startWarpdrive(warpdriveCache.absolutePath, warpdriveDir.absolutePath)
         } catch (e: Throwable) {
             e.printStackTrace()
         } finally {

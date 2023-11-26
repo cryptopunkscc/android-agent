@@ -8,7 +8,12 @@ import cc.cryptopunks.astral.apphost.QueryData
 
 internal fun AppHostClient(): AppHostClient = AppHostClientAdapter()
 
-internal class Conn(conn: astral.Conn) : astral.Conn by conn, AstralConn
+internal class Conn(private val conn: astral.Conn?) : AstralConn {
+    override fun close() = conn!!.close()
+    override fun read(buff: ByteArray): Int = conn!!.read(buff).toInt()
+    override fun readN(n: Int): ByteArray = conn!!.readN(n.toLong())
+    override fun write(buff: ByteArray): Int = conn!!.write(buff).toInt()
+}
 
 private class AppHostClientAdapter : AppHostClient {
     private val client: astral.AppHostClient = Astral.newApphostClient()

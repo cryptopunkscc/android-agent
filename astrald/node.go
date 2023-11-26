@@ -12,6 +12,7 @@ import (
 )
 
 var identity string
+var astralCtx context.Context
 var stop context.CancelFunc
 
 func Start(
@@ -25,8 +26,7 @@ func Start(
 	log.Println("astral staring")
 
 	// Set up app execution context
-	var ctx context.Context
-	ctx, stop = context.WithCancel(context.Background())
+	astralCtx, stop = context.WithCancel(context.Background())
 
 	// start the node
 	var n *node.CoreNode
@@ -38,7 +38,7 @@ func Start(
 	identity = n.Identity().String()
 
 	// Run the node
-	if err = n.Run(ctx); err != nil {
+	if err = n.Run(astralCtx); err != nil {
 		err = fmt.Errorf("run error: %v", err)
 		return
 	}

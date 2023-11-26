@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import astral.Astral
 import astral.HandlersWorker
 import cc.cryptopunks.astral.agent.admin.AdminClient
 import cc.cryptopunks.astral.agent.contacts.AstralLinksRepository
@@ -40,7 +41,9 @@ class AstraldService : Service(), CoroutineScope {
             startAstral()
             delay(200)
             launch { get<AstralLinksRepository>().observe() }
-            handlersWorker.startAsync()
+            launch { Astral.startNotifier(get()) }
+            launch { Astral.startContentResolver(get()) }
+            launch { handlersWorker.start() }
             delay(200)
             startWarpdrive()
             jsAppsManager.startServices()
@@ -64,8 +67,6 @@ class AstraldService : Service(), CoroutineScope {
         stopForeground(STOP_FOREGROUND_REMOVE)
         Log.d(tag, "Destroying astral service")
         jsAppsManager.stopServices()
-        stopWarpdrive()
-        handlersWorker.cancel()
         stopAstral()
         cancel()
     }

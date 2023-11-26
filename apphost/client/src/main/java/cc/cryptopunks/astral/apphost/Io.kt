@@ -2,6 +2,7 @@ package cc.cryptopunks.astral.apphost
 
 import java.io.EOFException
 import java.io.InputStream
+import java.io.OutputStream
 
 // =========================== Read ===========================
 
@@ -9,7 +10,7 @@ fun Conn.read(
     size: Int,
 ) = ByteArray(size)
     .also { buff ->
-        val len = read(buff).toInt()
+        val len = read(buff)
         if (len == -1) throw EOFException("EOF")
         check(len == size) { "Expected $size bytes but was $len" }
     }
@@ -19,7 +20,7 @@ fun Conn.readMessage(): String? {
     val buffer = ByteArray(4096)
     var len: Int
     do {
-        len = read(buffer).toInt()
+        len = read(buffer)
         if (len > 0) result.append(String(buffer.copyOf(len)))
     } while (len == buffer.size)
     return when {
@@ -139,3 +140,42 @@ var Conn.identity: ByteArray
 
 private val zero = 0.toByte()
 private val localnode = "localnode".toByteArray()
+
+// =========================== Stream ===========================
+
+val Conn.inputStream: InputStream get() = ConnInputStream(this)
+val Conn.outputStream: OutputStream get() = ConnOutputStream(this)
+
+private class ConnInputStream(private val conn: Conn) : InputStream() {
+    override fun readNBytes(len: Int) = conn.readN(len)
+    override fun read(): Int = conn.readN(1)[0].toInt()
+    override fun read(buff: ByteArray) = conn.read(buff)
+    override fun read(b: ByteArray, off: Int, len: Int): Int {
+        if (off == 0 && len == b.size) {
+            return conn.read(b)
+        }
+        val r = conn.readN(len)
+        System.arraycopy(r, 0, b, off, r.size)
+        return r.size
+    }
+}
+
+private class ConnOutputStream(private val conn: Conn) : OutputStream() {
+
+    override fun write(p0: Int) {
+        conn.write(ByteArray(1) { p0.toByte() })
+    }
+
+    override fun write(b: ByteArray, off: Int, len: Int) {
+        if (off == 0 && len == b.size) {
+            conn.write(b)
+            return
+        }
+        val copy = b.copyOfRange(off, off + len)
+        conn.write(copy)
+    }
+
+    override fun close() {
+        conn.close()
+    }
+}

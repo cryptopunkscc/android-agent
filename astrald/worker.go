@@ -11,7 +11,7 @@ type Worker struct {
 }
 
 func newWorker() *Worker {
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(astralCtx)
 	worker := &Worker{ctx: ctx, cancel: cancel}
 	return worker
 }
