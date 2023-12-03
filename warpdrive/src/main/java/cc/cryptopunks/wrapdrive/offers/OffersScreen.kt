@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import cc.cryptopunks.astral.agent.api.ext
+import cc.cryptopunks.astral.agent.api.inject
 import cc.cryptopunks.wrapdrive.EmptyPeerOffer
 import cc.cryptopunks.wrapdrive.compose.WarpdriveConnectionView
 import cc.cryptopunks.wrapdrive.offer.OfferDetailsScreen
@@ -44,5 +44,5 @@ internal fun OffersScreen(
             if (offer != EmptyPeerOffer) OfferDetailsScreen(offerModel)
         }
     }
-    ext.Errors()
+    inject.Errors()
 }

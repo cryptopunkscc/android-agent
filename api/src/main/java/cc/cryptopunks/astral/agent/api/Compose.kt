@@ -3,7 +3,7 @@ package cc.cryptopunks.astral.agent.api
 import androidx.compose.runtime.Composable
 import org.koin.compose.koinInject
 
-val ext @Composable get() = koinInject<ComposeApi>()
+val inject @Composable get() = koinInject<ComposeApi>()
 
 @Suppress("PropertyName")
 data class ComposeApi(

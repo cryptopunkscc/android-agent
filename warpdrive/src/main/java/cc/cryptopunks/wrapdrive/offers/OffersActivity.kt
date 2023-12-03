@@ -7,7 +7,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import cc.cryptopunks.astral.agent.api.ext
+import cc.cryptopunks.astral.agent.api.inject
 import cc.cryptopunks.wrapdrive.offer.OfferViewModel
 import cc.cryptopunks.wrapdrive.offer.setOfferId
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,7 +20,7 @@ class OffersActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         offerModel.setOfferId(intent)
         setContent {
-            ext.Theme {
+            inject.Theme {
                 OffersScreen()
 
                 val id by offerModel.offerId.collectAsState()

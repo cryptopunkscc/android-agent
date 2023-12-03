@@ -7,7 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import cc.cryptopunks.astral.agent.api.ext
+import cc.cryptopunks.astral.agent.api.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ShareActivity : ComponentActivity() {
@@ -23,10 +23,10 @@ class ShareActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setUri(intent)
         setContent {
-            ext.Theme {
+            inject.Theme {
                 ShareScreen(
                     shareModel = model,
-                    contacts = ext.Contacts,
+                    contacts = inject.Contacts,
                     selectUri = { selectUri.startFileChooser() }
                 )
             }

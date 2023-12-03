@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import cc.cryptopunks.astral.agent.api.ext
+import cc.cryptopunks.astral.agent.api.inject
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
         tryStartAstralService()
         setContent {
             MainScreen()
-            ext.Errors()
+            inject.Errors()
         }
     }
 
