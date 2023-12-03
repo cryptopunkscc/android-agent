@@ -10,11 +10,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
@@ -24,7 +24,7 @@ fun LogScreen(
     model: LogViewModel = koinNavViewModel(),
     preferences: LogPreferences = koinInject(),
 ) {
-    val text by model.logText.collectAsState()
+    val text by model.logText.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
     val softWrap by preferences.softWrap

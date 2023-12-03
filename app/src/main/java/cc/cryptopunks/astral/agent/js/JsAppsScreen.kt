@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cc.cryptopunks.astral.agent.compose.EditableItemList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ fun JsAppsScreen(
 ) {
     Box(modifier = modifier) {
         val context = LocalContext.current
-        val apps by jsAppsManager.apps.collectAsState()
+        val apps by jsAppsManager.apps.collectAsStateWithLifecycle()
         JsApps(
             apps = apps,
             startClick = {

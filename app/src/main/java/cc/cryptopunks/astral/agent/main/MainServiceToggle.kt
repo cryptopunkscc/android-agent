@@ -10,7 +10,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +21,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cc.cryptopunks.astral.agent.R
 import cc.cryptopunks.astral.agent.node.AstralStatus
 import cc.cryptopunks.astral.agent.node.astralStatus
@@ -29,7 +29,7 @@ import cc.cryptopunks.astral.agent.node.astralStatus
 
 @Composable
 fun MainServiceToggle() {
-    val status by astralStatus.collectAsState()
+    val status by astralStatus.collectAsStateWithLifecycle()
     val context = LocalContext.current
     MainServiceToggle(status) {
         when (status) {

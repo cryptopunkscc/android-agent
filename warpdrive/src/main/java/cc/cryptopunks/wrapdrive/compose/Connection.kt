@@ -10,7 +10,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cc.cryptopunks.astral.agent.api.startAgentActivity
 import cc.cryptopunks.astral.agent.api.startAgentService
 import cc.cryptopunks.wrapdrive.WarpdriveStatus
@@ -30,7 +30,7 @@ fun WarpdriveConnectionView(
     content: @Composable () -> Unit,
 ) = Box(modifier = modifier) {
     val context = LocalContext.current
-    val isConnected by warpdriveStatus.collectAsState(true)
+    val isConnected by warpdriveStatus.collectAsStateWithLifecycle(true)
     if (isConnected) content()
     else DisconnectionView(
         startAstralActivity = context::startAgentActivity,

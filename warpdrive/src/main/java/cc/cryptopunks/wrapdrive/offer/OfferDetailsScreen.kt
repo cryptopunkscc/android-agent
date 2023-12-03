@@ -15,13 +15,13 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cc.cryptopunks.wrapdrive.Info
 import cc.cryptopunks.wrapdrive.Offer
@@ -42,7 +42,7 @@ import kotlin.random.Random
 internal fun OfferDetailsScreen(
     model: OfferViewModel = viewModel(),
 ) {
-    val data by model.offer.collectAsState()
+    val data by model.offer.collectAsStateWithLifecycle()
     val context = LocalContext.current
     OfferDetailsScreen(data = data) {
         context.requireWritePermissions {

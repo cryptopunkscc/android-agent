@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
@@ -41,7 +41,7 @@ fun AdminScreen(
     model: AdminViewModel = koinNavViewModel(),
     preferences: AdminPreferences = koinInject(),
 ) {
-    val output by model.output.collectAsState(initial = "")
+    val output by model.output.collectAsStateWithLifecycle()
 
     AdminScreen(
         output = output,

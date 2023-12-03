@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cc.cryptopunks.astral.agent.api.inject
 import cc.cryptopunks.wrapdrive.EmptyPeerOffer
 import cc.cryptopunks.wrapdrive.compose.WarpdriveConnectionView
@@ -40,7 +41,7 @@ internal fun OffersScreen(
             OffersDashboardContent(offersModel.offers) { peerOffer ->
                 offerModel.set(peerOffer.offer.id)
             }
-            val offer by offerModel.offer.collectAsState()
+            val offer by offerModel.offer.collectAsStateWithLifecycle()
             if (offer != EmptyPeerOffer) OfferDetailsScreen(offerModel)
         }
     }

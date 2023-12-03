@@ -8,7 +8,6 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cc.cryptopunks.astral.agent.compose.AstralTheme
 import cc.cryptopunks.astral.agent.compose.EditableItemList
 import org.koin.androidx.compose.navigation.koinNavViewModel
@@ -28,7 +28,7 @@ fun ConfigScreen(
     edit: (File) -> Unit,
 ) {
     ConfigScreen(
-        items = model.files.collectAsState().value,
+        items = model.files.collectAsStateWithLifecycle().value,
         remove = model::remove,
         create = model::create,
         select = edit,

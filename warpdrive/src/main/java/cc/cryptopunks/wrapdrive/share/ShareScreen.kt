@@ -18,7 +18,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cc.cryptopunks.wrapdrive.Offer
 import cc.cryptopunks.wrapdrive.R
@@ -43,8 +43,8 @@ fun ShareScreen(
     contacts: @Composable ((String) -> Unit) -> Unit = {},
     selectUri: () -> Unit = {},
 ) {
-    val isSharing by shareModel.isSharing.collectAsState()
-    val uriTime by shareModel.uri.collectAsState()
+    val isSharing by shareModel.isSharing.collectAsStateWithLifecycle()
+    val uriTime by shareModel.uri.collectAsStateWithLifecycle()
     val uri = uriTime.first
 
     ShareScreen(

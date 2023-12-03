@@ -8,11 +8,11 @@ import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cc.cryptopunks.wrapdrive.FilterIn
 import cc.cryptopunks.wrapdrive.FilterOut
 import cc.cryptopunks.wrapdrive.PeerOffer
@@ -65,7 +65,7 @@ fun OffersDashboardContent(
             count = filters.size,
             state = pagerState
         ) { page ->
-            val items by offers[page].collectAsState(emptyList())
+            val items by offers[page].collectAsStateWithLifecycle(emptyList())
             OfferItems(
                 offers = items,
                 filter = filters[page],
