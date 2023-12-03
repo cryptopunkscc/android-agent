@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -68,7 +69,7 @@ fun MainServiceToggle(
             AstralStatus.Started -> R.drawable.link_black_24dp
             AstralStatus.Stopped -> R.drawable.link_off_black_24dp
         }
-        var angle by remember(status) { mutableStateOf(0f) }
+        var angle by remember(status) { mutableFloatStateOf(0f) }
         val rotation = remember(status) { Animatable(angle) }
         LaunchedEffect(status) {
             if (status == AstralStatus.Starting) {

@@ -3,8 +3,8 @@ package cc.cryptopunks.astral.agent.js
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import astral.Astral
-import astral.Worker
+import cc.cryptopunks.astral.bind.astral.Astral
+import cc.cryptopunks.astral.bind.astral.Worker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update

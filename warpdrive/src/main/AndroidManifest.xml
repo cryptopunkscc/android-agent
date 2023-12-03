@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".offers.OffersActivity"
+            android:exported="true"
+            android:label="Warp Drive"
+            android:taskAffinity="cc.cryptopunks.warpdrive.offers"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <data
+                    android:host="offer"
+                    android:scheme="warpdrive" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".share.ShareActivity"
+            android:exported="true"
+            android:label="@string/share_file_label"
+            android:launchMode="singleTask"
+            android:taskAffinity="cc.cryptopunks.warpdrive.share"
+            android:theme="@style/Theme.Warpdrive.NoActionBar">
+            <intent-filter>
+                <data android:mimeType="*/*" />
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".download.DownloadActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Warpdrive.Translucent">
+            <intent-filter>
+                <data
+                    android:host="download"
+                    android:scheme="warpdrive" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

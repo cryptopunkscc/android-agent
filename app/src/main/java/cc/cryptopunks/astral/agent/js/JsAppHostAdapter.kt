@@ -3,8 +3,8 @@ package cc.cryptopunks.astral.agent.js
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
-import astral.Astral
-import astral.JsAppHostClient
+import cc.cryptopunks.astral.bind.astral.Astral
+import cc.cryptopunks.astral.bind.astral.JsAppHostClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

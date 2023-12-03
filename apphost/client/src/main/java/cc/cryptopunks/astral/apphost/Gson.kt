@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class GsonAppHostClient(
-    val client: AppHostClient,
+    client: AppHostClient,
     gson: Gson = defaultGson,
 ) : AppHostClientAdapter<ConnSerializer>(client) {
     private val serializer = GsonSerializer(gson)
@@ -17,7 +17,7 @@ val gsonSerializer: Serializer by lazy {
     GsonSerializer(defaultGson)
 }
 
-private val defaultGson by lazy {
+val defaultGson by lazy {
     Gson().newBuilder()
         .setFieldNamingStrategy { it.name.replaceFirstChar(Char::uppercase) }
         .create()

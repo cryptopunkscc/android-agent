@@ -5,19 +5,22 @@ import cc.cryptopunks.astral.apphost.ConnSerializer
 import cc.cryptopunks.astral.apphost.Serializer
 import cc.cryptopunks.astral.apphost.gsonSerializer
 import cc.cryptopunks.astral.apphost.serializer
+import cc.cryptopunks.astral.bind.astral.Handlers
+import cc.cryptopunks.astral.bind.astral.Conn as AstralConn
+import cc.cryptopunks.astral.bind.astral.Handler as AstralHandler
 
 typealias Method = ConnSerializer.() -> Unit
 
 typealias Methods = Map<String, Method>
 
-class Handlers(vararg methods: Methods) : astral.Handlers {
+class Handlers(vararg methods: Methods) : Handlers {
 
     private val iterator = methods
         .reduce(Methods::plus)
         .map { (name, serve) -> Handler(name, gsonSerializer, serve) }
         .iterator()
 
-    override fun next(): astral.Handler? =
+    override fun next(): AstralHandler? =
         iterator.run { if (hasNext()) next() else null }
 }
 
@@ -25,11 +28,11 @@ private class Handler(
     private val name: String,
     private val enc: Serializer,
     private val method: Method,
-) : astral.Handler {
+) : AstralHandler {
 
     override fun string(): String = name
 
-    override fun serve(conn: astral.Conn) {
+    override fun serve(conn: AstralConn) {
         try {
             Conn(conn).serializer(enc).method()
         } catch (e: Throwable) {

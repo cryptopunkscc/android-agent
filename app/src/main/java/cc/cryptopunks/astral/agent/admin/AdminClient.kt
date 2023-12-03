@@ -1,7 +1,7 @@
 package cc.cryptopunks.astral.agent.admin
 
-import astral.JsAppHostClient
 import cc.cryptopunks.astral.agent.exception.ExceptionsState
+import cc.cryptopunks.astral.bind.astral.JsAppHostClient
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +27,7 @@ class AdminClient(
                 val string = client.connRead(id).clearFormatting()
                 accumulated.update { it + string }
             }
-        } catch (e: Throwable) {
+        } catch (e: Exception) {
             client.runCatching { connClose(id) }
             val message = e.message.orEmpty()
             when {

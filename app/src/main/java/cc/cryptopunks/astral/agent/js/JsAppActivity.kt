@@ -15,8 +15,8 @@ import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.core.net.toFile
-import astral.Astral
-import astral.JsAppHostClient
+import cc.cryptopunks.astral.bind.astral.Astral
+import cc.cryptopunks.astral.bind.astral.JsAppHostClient
 import java.io.File
 
 internal fun Context.startJsAppActivity(app: JsApp) {
@@ -25,7 +25,7 @@ internal fun Context.startJsAppActivity(app: JsApp) {
     val file = dir.resolve("index.html")
     val uri = Uri.fromFile(file)
     intent.data = uri
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.addFlags(/*Intent.FLAG_ACTIVITY_NEW_DOCUMENT or */Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
     startActivity(intent)
 }
 

@@ -32,7 +32,7 @@ import org.koin.compose.koinInject
 @Composable
 private fun ErrorsPreview() = AstralTheme {
     val message = "Test error preview, with some long description, that will overflow in dialog, so the UI can be adjusted."
-    ErrorsScreen(errors = mutableListOf(Throwable(message)))
+    ErrorsScreen(errors = mutableListOf(Exception(message)))
 }
 
 @Composable

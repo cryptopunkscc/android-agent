@@ -1,7 +1,9 @@
 package cc.cryptopunks.astral.agent.warpdrive
 
 import android.content.Context
-import astral.Astral
+import android.os.Environment.DIRECTORY_DOWNLOADS
+import android.os.Environment.getExternalStoragePublicDirectory
+import cc.cryptopunks.astral.bind.astral.Astral
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -11,6 +13,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
+import java.io.File
 import java.util.concurrent.Executors
 import kotlin.time.Duration.Companion.seconds
 
@@ -20,31 +23,33 @@ private val executor = Executors.newSingleThreadExecutor()
 
 private val scope = CoroutineScope(SupervisorJob() + executor.asCoroutineDispatcher())
 
-private val status = MutableStateFlow(WarpdriveStatus.Stopped)
+internal val warpdriveStatus = MutableStateFlow(WarpdriveStatus.Stopped)
 
 private var warpdriveJob: Job = Job().apply { complete() }
 
-private val Context.warpdriveDir get() = getDir("warpdrive", 0)
+private val warpdriveDir: File = getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+    .resolve("warpdrive").apply { mkdirs() }
+
 private val Context.warpdriveCache get() = cacheDir.resolve("warpdrive").apply { mkdirs() }
 
 fun Context.startWarpdrive() {
     if (!warpdriveJob.isCompleted) return
-    status.value = WarpdriveStatus.Starting
+    warpdriveStatus.value = WarpdriveStatus.Starting
     warpdriveJob = scope.launch {
         try {
             Astral.startWarpdrive(warpdriveCache.absolutePath, warpdriveDir.absolutePath)
         } catch (e: Throwable) {
             e.printStackTrace()
         } finally {
-            status.value = WarpdriveStatus.Stopped
+            warpdriveStatus.value = WarpdriveStatus.Stopped
         }
     }
-    status.value = WarpdriveStatus.Started
+    warpdriveStatus.value = WarpdriveStatus.Started
 }
 
 fun stopWarpdrive() = runBlocking {
     val status = withTimeoutOrNull(5.seconds) {
-        status.first { it != WarpdriveStatus.Starting }
+        warpdriveStatus.first { it != WarpdriveStatus.Starting }
     }
     if (status != WarpdriveStatus.Stopped) {
         Astral.stopWarpdrive()

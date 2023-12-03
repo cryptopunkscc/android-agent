@@ -30,7 +30,10 @@ task buildGoMobile(type: Exec) {
     doFirst {
         mkdir buildDir
     }
-    commandLine "gomobile", "bind", "-v", "-o", "./build/astral.aar", "-target=android"
+    commandLine "gomobile", "bind", "-v", "-o", "./build/astral.aar", "-target=android",
+            "-javapkg=cc.cryptopunks.astral.bind",
+            "github.com/cryptopunkscc/android-astral-agent/",
+            "github.com/cryptopunkscc/go-apphost-jrpc/android/"
 }
 
 compileJava.dependsOn buildGoMobile

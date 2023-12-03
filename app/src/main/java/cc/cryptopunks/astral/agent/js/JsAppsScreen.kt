@@ -23,7 +23,7 @@ import org.koin.compose.koinInject
 @Composable
 fun JsAppsScreen(
     modifier: Modifier = Modifier,
-    errors: MutableList<Throwable> = koinInject(),
+    errors: MutableList<Exception> = koinInject(),
     jsAppsManager: JsAppsManager = koinInject(),
 ) {
     Box(modifier = modifier) {

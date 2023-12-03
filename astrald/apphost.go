@@ -68,7 +68,7 @@ func (a *appHostClient) Query(nodeID string, query string) (c Conn, err error) {
 var _ io.ReadWriteCloser = &conn{}
 
 type conn struct {
-	*astral.Conn
+	Conn io.ReadWriteCloser
 }
 
 func (c *conn) ReadN(n int) (b []byte, err error) {

@@ -20,3 +20,5 @@ rootProject.name = "astral-agent"
 include ':app'
 include ':astrald'
 include ':apphost:client'
+include ':warpdrive'
+include ':api'

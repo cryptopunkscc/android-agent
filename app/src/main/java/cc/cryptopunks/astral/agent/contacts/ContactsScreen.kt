@@ -12,19 +12,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import org.koin.androidx.compose.koinViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cc.cryptopunks.astral.agent.api.Contact
+import org.koin.compose.koinInject
 
 @Composable
 fun ContactsScreen(
-    model: ContactsViewModel = koinViewModel(),
+    model: ContactsRepository = koinInject(),
     select: ((String) -> Unit)? = null,
 ) {
-    val contacts by model.state.collectAsState()
+    val contacts by model.flow.collectAsStateWithLifecycle()
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
     ) {

@@ -5,15 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import astral.Astral
-import astral.HandlersWorker
 import cc.cryptopunks.astral.agent.admin.AdminClient
-import cc.cryptopunks.astral.agent.contacts.AstralLinksRepository
 import cc.cryptopunks.astral.agent.js.JsAppsManager
 import cc.cryptopunks.astral.agent.node.startAstral
 import cc.cryptopunks.astral.agent.node.stopAstral
 import cc.cryptopunks.astral.agent.warpdrive.startWarpdrive
-import cc.cryptopunks.astral.agent.warpdrive.stopWarpdrive
+import cc.cryptopunks.astral.bind.astral.Astral
+import cc.cryptopunks.astral.bind.astral.HandlersWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -40,7 +38,6 @@ class AstraldService : Service(), CoroutineScope {
             Log.d(tag, "Starting astral service")
             startAstral()
             delay(200)
-            launch { get<AstralLinksRepository>().observe() }
             launch { Astral.startNotifier(get()) }
             launch { Astral.startContentResolver(get()) }
             launch { handlersWorker.start() }

@@ -1,8 +1,30 @@
 package cc.cryptopunks.astral.apphost
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.io.EOFException
 import java.io.InputStream
 import java.io.OutputStream
+
+suspend inline fun <C : Conn, R> C.use(crossinline block: suspend C.() -> R): R {
+    val deferred = CompletableDeferred<R>()
+    return coroutineScope {
+        try {
+            launch(Dispatchers.IO) {
+                try {
+                    deferred.complete(block())
+                } catch (e: Throwable) {
+                    deferred.completeExceptionally(e)
+                }
+            }
+            deferred.await()
+        } finally {
+            close()
+        }
+    }
+}
 
 // =========================== Read ===========================
 

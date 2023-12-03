@@ -4,14 +4,21 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.net.Uri import androidx.core.app.NotificationChannelCompat
+import android.net.Uri
+import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import cc.cryptopunks.astral.agent.R
+import cc.cryptopunks.astral.bind.android.Action
+import cc.cryptopunks.astral.bind.android.NotifyServiceApi
+import cc.cryptopunks.astral.bind.android.Progress
+import cc.cryptopunks.astral.bind.android.Channel as NotificationChannel
+import cc.cryptopunks.astral.bind.android.Intent as AstralIntent
+import cc.cryptopunks.astral.bind.android.Notification as AstralNotification
 
 class Notifier(
     private val context: Context,
-) : astral.Notifier {
+) : NotifyServiceApi {
 
     private val manager: NotificationManagerCompat = NotificationManagerCompat.from(context)
 
@@ -19,26 +26,27 @@ class Notifier(
         return "android/notify/jrpc"
     }
 
-    override fun create(channel: astral.NotificationChannel) {
+    override fun create(channel: NotificationChannel) {
         val compat = NotificationChannelCompat
             .Builder(channel.id, channel.importance.toInt())
             .setName(channel.name)
             .build()
         manager.createNotificationChannel(compat)
-
     }
 
-    override fun notify(notification: astral.Notification) {
+    override fun notify(notification: AstralNotification) = try {
         context.notify(manager, notification)
+    } catch (e: Throwable) {
+        e.printStackTrace()
     }
 }
 
 @SuppressLint("MissingPermission")
-private fun Context.notify(manager: NotificationManagerCompat, notification: astral.Notification) {
+private fun Context.notify(manager: NotificationManagerCompat, notification: AstralNotification) {
     manager.notify(notification.id.toInt() + 100, notification.compat(this))
 }
 
-private fun astral.Notification.compat(context: Context) = NotificationCompat
+private fun AstralNotification.compat(context: Context) = NotificationCompat
     .Builder(context, channelId)
     .setContentTitle(contentTitle)
     .setContentText(contentText)
@@ -60,22 +68,22 @@ private fun astral.Notification.compat(context: Context) = NotificationCompat
     .setProgress(progress)
     .build()
 
-private fun astral.AndroidIntent.android(context: Context): PendingIntent {
+private fun AstralIntent.android(context: Context): PendingIntent {
     val action = action.ifEmpty { Intent.ACTION_VIEW }
     val intent = Intent(action, Uri.parse(uri)).apply {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     }
     return when (type) {
-        "service" -> PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        else -> PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        "service" -> PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        else -> PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 }
 
-private fun astral.NotificationAction.android(context: Context): NotificationCompat.Action {
-    return NotificationCompat.Action(resolveIconId(icon), title, contentIntent?.android(context))
+private fun Action.android(context: Context): NotificationCompat.Action {
+    return NotificationCompat.Action(resolveIconId(icon), title, intent?.android(context))
 }
 
-private fun NotificationCompat.Builder.setProgress(progress: astral.NotificationProgress?) = apply {
+private fun NotificationCompat.Builder.setProgress(progress: Progress?) = apply {
     progress?.run {
         setProgress(max.toInt(), current.toInt(), indeterminate)
     }

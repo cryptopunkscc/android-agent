@@ -3,10 +3,10 @@ package cc.cryptopunks.astral.agent.node.handler.content
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import cc.cryptopunks.astral.agent.node.handler.Methods
 import cc.cryptopunks.astral.apphost.byte
 import cc.cryptopunks.astral.apphost.long
 import cc.cryptopunks.astral.apphost.string8
-import cc.cryptopunks.astral.agent.node.handler.Methods
 import cc.cryptopunks.astral.apphost.write
 
 fun Context.contentResolverMethods(

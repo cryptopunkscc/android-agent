@@ -30,19 +30,15 @@ abstract class AppHostClientAdapter<C : Conn>(
 
     protected abstract fun convert(conn: Conn): C
 
-    override fun query(query: String, nodeId: String): C =
-        convert(client.query(query, nodeId))
+    override fun query(query: String, nodeId: String): C = convert(client.query(query, nodeId))
 
     override fun register(name: String): ApphostListener = Listener(client.register(name))
 
-    inner class Listener(private val listener: ApphostListener): ApphostListener {
+    inner class Listener(private val listener: ApphostListener) : ApphostListener {
         override fun next(): QueryData = Query(listener.next())
     }
 
-    inner class Query(
-        private val query: QueryData
-    ) : QueryData by query {
-
+    inner class Query(private val query: QueryData) : QueryData by query {
         override fun accept() = convert(query.accept())
     }
 }

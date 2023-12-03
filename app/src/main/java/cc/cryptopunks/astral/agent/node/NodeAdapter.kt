@@ -2,7 +2,7 @@ package cc.cryptopunks.astral.agent.node
 
 import android.content.Context
 import android.util.Log
-import astral.Astral
+import cc.cryptopunks.astral.bind.astral.Astral
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

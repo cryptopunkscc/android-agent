@@ -1,4 +1,6 @@
-package cc.cryptopunks.astral.agent.contacts
+package cc.cryptopunks.astral.agent.api
+
+import kotlinx.coroutines.flow.StateFlow
 
 data class Link(
     val id: String,
@@ -8,5 +10,9 @@ data class Link(
     val idle: Long,
     val since: Long,
     val latency: Long,
-)
+) {
 
+    interface Repository {
+        val flow: StateFlow<List<Link>>
+    }
+}

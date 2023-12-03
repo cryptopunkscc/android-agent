@@ -2,11 +2,11 @@ package cc.cryptopunks.astral.agent.node.handler.notification
 
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
+import cc.cryptopunks.astral.agent.node.handler.Methods
 import cc.cryptopunks.astral.apphost.byte
 import cc.cryptopunks.astral.apphost.decodeList
 import cc.cryptopunks.astral.apphost.decodeMessage
 import cc.cryptopunks.astral.apphost.gsonSerializer
-import cc.cryptopunks.astral.agent.node.handler.Methods
 
 fun Context.notificationManagerMethods(): Methods {
     val manager: NotificationManagerCompat = NotificationManagerCompat.from(this)

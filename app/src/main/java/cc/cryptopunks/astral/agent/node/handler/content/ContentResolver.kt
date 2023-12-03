@@ -2,15 +2,17 @@ package cc.cryptopunks.astral.agent.node.handler.content
 
 import android.content.Context
 import android.net.Uri
-import astral.ContentInfo
 import cc.cryptopunks.astral.apphost.Conn
 import cc.cryptopunks.astral.apphost.write
+import cc.cryptopunks.astral.bind.android.ContentServiceApi
+import cc.cryptopunks.astral.bind.android.Info
+import cc.cryptopunks.astral.bind.astral.ContentResolverFactory
 import cc.cryptopunks.astral.agent.node.Conn as ConnAdapter
 
 class ContentResolver(
     context: Context,
     private val conn: Conn,
-) : astral.ContentResolver {
+) : ContentServiceApi {
 
     private val resolver = context.contentResolver
 
@@ -18,9 +20,9 @@ class ContentResolver(
         return "android/content/jrpc"
     }
 
-    override fun info(uri: String): ContentInfo {
+    override fun info(uri: String): Info {
         val info = resolver.info(uri)
-        return ContentInfo().apply {
+        return Info().apply {
             this.uri = uri
             mime = info.mime
             name = info.name
@@ -37,6 +39,6 @@ class ContentResolver(
 }
 
 fun ContentResolverFactory(context: Context) =
-    astral.ContentResolverFactory {
+    ContentResolverFactory {
         ContentResolver(context, ConnAdapter(it))
     }
