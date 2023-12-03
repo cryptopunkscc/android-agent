@@ -24,11 +24,11 @@ import cc.cryptopunks.astral.agent.compose.AstralTheme
 @Composable
 private fun StackTracePreview() = AstralTheme {
     val message = "Test error preview, with some long description, that will overflow in dialog, so the UI can be adjusted."
-    StackTrace(err = Throwable(message))
+    StackTraceView(err = Throwable(message))
 }
 
 @Composable
-internal fun StackTrace(
+internal fun StackTraceView(
     err: Throwable,
     dismiss: () -> Unit = {}
 ) {

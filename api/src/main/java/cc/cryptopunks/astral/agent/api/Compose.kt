@@ -9,5 +9,5 @@ val ext @Composable get() = koinInject<ComposeApi>()
 data class ComposeApi(
     val Theme: @Composable (@Composable () -> Unit) -> Unit,
     val Contacts: @Composable ((String) -> Unit) -> Unit,
-    val Errors: @Composable (MutableList<Exception>) -> Unit,
+    val Errors: @Composable () -> Unit,
 )

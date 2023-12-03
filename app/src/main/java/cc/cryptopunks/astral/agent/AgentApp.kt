@@ -14,9 +14,11 @@ import cc.cryptopunks.astral.agent.warpdrive.warpdriveStatus
 import cc.cryptopunks.wrapdrive.WarpdriveStatus
 import cc.cryptopunks.wrapdrive.warpdriveModule
 import kotlinx.coroutines.flow.map
+import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import java.lang.Thread.setDefaultUncaughtExceptionHandler
 
 class AgentApp : Application() {
 
@@ -41,5 +43,6 @@ class AgentApp : Application() {
                 }
             )
         }
+        setDefaultUncaughtExceptionHandler(get())
     }
 }

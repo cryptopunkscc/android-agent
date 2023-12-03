@@ -11,18 +11,16 @@ import java.io.OutputStream
 suspend inline fun <C : Conn, R> C.use(crossinline block: suspend C.() -> R): R {
     val deferred = CompletableDeferred<R>()
     return coroutineScope {
-        try {
-            launch(Dispatchers.IO) {
-                try {
-                    deferred.complete(block())
-                } catch (e: Throwable) {
-                    deferred.completeExceptionally(e)
-                }
+        launch(Dispatchers.IO) {
+            try {
+                deferred.complete(block())
+            } catch (e: Throwable) {
+                deferred.completeExceptionally(e)
+            } finally {
+                close()
             }
-            deferred.await()
-        } finally {
-            close()
         }
+        deferred.await()
     }
 }
 

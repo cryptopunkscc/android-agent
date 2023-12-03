@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class OfferViewModel(
     private val repository: OffersRepository,
-    private val errors: MutableList<Exception>,
 ) : ViewModel() {
 
     private val _offerId = MutableStateFlow("")
@@ -51,11 +50,7 @@ internal class OfferViewModel(
         val id = offerId.value
         if (id.isBlank()) return
         viewModelScope.launch {
-            try {
-                repository.download(id)
-            } catch (e: Exception) {
-                errors += e
-            }
+            repository.download(id)
         }
     }
 }

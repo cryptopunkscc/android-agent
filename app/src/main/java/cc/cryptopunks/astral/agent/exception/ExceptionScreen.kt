@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cc.cryptopunks.astral.agent.compose.AstralTheme
 import org.koin.compose.koinInject
 
@@ -32,17 +33,19 @@ import org.koin.compose.koinInject
 @Composable
 private fun ErrorsPreview() = AstralTheme {
     val message = "Test error preview, with some long description, that will overflow in dialog, so the UI can be adjusted."
-    ErrorsScreen(errors = mutableListOf(Exception(message)))
+    val errors = ExceptionsState()
+    errors.plusAssign(Exception(message))
+    ErrorsScreen(errors = errors)
 }
 
 @Composable
 fun ErrorsScreen(
     errors: ExceptionsState = koinInject(),
 ) {
-    errors.forEachIndexed { index, err ->
-        err.printStackTrace()
+    val error by errors.current.collectAsStateWithLifecycle(null)
+    error?.let { err ->
         val drop: () -> Unit = {
-            errors.removeAt(index)
+            errors.pop()
         }
         var stacktrace by remember(err) {
             mutableStateOf(false)
@@ -94,7 +97,7 @@ fun ErrorsScreen(
                 }
             }
         }
-        if (stacktrace) StackTrace(err = err) {
+        if (stacktrace) StackTraceView(err = err) {
             stacktrace = false
         }
     }

@@ -24,7 +24,6 @@ import cc.cryptopunks.astral.agent.config.ConfigScreen
 import cc.cryptopunks.astral.agent.contacts.ContactsScreen
 import cc.cryptopunks.astral.agent.dashboard.DashboardItem
 import cc.cryptopunks.astral.agent.dashboard.DashboardScreen
-import cc.cryptopunks.astral.agent.exception.ErrorsScreen
 import cc.cryptopunks.astral.agent.js.JsAppsScreen
 import cc.cryptopunks.astral.agent.log.LogScreen
 import cc.cryptopunks.astral.agent.log.LogWrapToggle
@@ -81,6 +80,5 @@ fun MainScreen() {
                 ConfigEditorScreen(mainNavController)
             }
         }
-        ErrorsScreen()
     }
 }

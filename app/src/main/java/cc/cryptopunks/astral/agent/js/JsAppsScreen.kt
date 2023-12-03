@@ -17,14 +17,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cc.cryptopunks.astral.agent.compose.EditableItemList
-import cc.cryptopunks.astral.agent.exception.catch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
 @Composable
 fun JsAppsScreen(
     modifier: Modifier = Modifier,
-    errors: MutableList<Exception> = koinInject(),
     jsAppsManager: JsAppsManager = koinInject(),
+    scope: CoroutineScope = koinInject(),
 ) {
     Box(modifier = modifier) {
         val context = LocalContext.current
@@ -32,17 +33,17 @@ fun JsAppsScreen(
         JsApps(
             apps = apps,
             startClick = {
-                errors catch  {
+                scope.launch {
                     context.startJsAppActivity(it)
                 }
             },
             installClick = { uri ->
-                errors catch {
+                scope.launch {
                     jsAppsManager.install(uri)
                 }
             },
             uninstallClick = {
-                errors catch {
+                scope.launch {
                     jsAppsManager.uninstall(it.name)
                 }
             }

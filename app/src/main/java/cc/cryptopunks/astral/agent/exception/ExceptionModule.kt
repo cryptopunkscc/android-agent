@@ -1,8 +1,12 @@
 package cc.cryptopunks.astral.agent.exception
 
-import androidx.compose.runtime.mutableStateListOf
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val exceptionModule = module {
-    single<ExceptionsState> { mutableStateListOf() }
+    singleOf(::ExceptionsState)
+    factoryOf(::ExceptionStorage)
+    factoryOf(::ExceptionHandler).bind<Thread.UncaughtExceptionHandler>()
 }

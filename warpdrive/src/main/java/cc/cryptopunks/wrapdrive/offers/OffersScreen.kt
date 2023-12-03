@@ -15,7 +15,6 @@ import cc.cryptopunks.wrapdrive.offer.OfferDetailsScreen
 import cc.cryptopunks.wrapdrive.offer.OfferViewModel
 import cc.cryptopunks.wrapdrive.share.ShareButton
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 @Composable
 internal fun OffersScreen(
@@ -45,5 +44,5 @@ internal fun OffersScreen(
             if (offer != EmptyPeerOffer) OfferDetailsScreen(offerModel)
         }
     }
-    ext.Errors(koinInject())
+    ext.Errors()
 }

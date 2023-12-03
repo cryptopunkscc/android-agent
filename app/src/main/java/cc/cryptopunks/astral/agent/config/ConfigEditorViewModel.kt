@@ -5,13 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import cc.cryptopunks.astral.agent.exception.ExceptionsState
-import cc.cryptopunks.astral.agent.exception.catch
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import java.io.File
 
 class ConfigEditorViewModel(
     savedStateHandle: SavedStateHandle,
-    private val errors: ExceptionsState,
 ) : ViewModel() {
 
     private val fileName: String = requireNotNull(savedStateHandle["file"])
@@ -20,7 +19,7 @@ class ConfigEditorViewModel(
 
     var text by mutableStateOf(file.readText())
 
-    fun save() = errors catch {
+    fun save() = viewModelScope.launch {
         file.writeText(text)
     }
 }

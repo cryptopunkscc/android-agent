@@ -1,6 +1,5 @@
 package cc.cryptopunks.astral.agent.admin
 
-import cc.cryptopunks.astral.agent.exception.ExceptionsState
 import cc.cryptopunks.astral.bind.astral.JsAppHostClient
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +9,6 @@ import kotlinx.coroutines.isActive
 
 class AdminClient(
     private val client: JsAppHostClient,
-    private val exceptions: ExceptionsState,
 ) {
     private var id = ""
 
@@ -33,7 +31,7 @@ class AdminClient(
             when {
                 "apphost" in message -> break
                 "EOF" in message -> break
-                else -> exceptions += e
+                else -> throw e
             }
         }
     }

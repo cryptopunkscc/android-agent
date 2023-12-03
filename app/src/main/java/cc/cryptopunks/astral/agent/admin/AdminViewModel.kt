@@ -4,19 +4,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import cc.cryptopunks.astral.agent.exception.ExceptionsState
-import cc.cryptopunks.astral.agent.exception.catch
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class AdminViewModel(
     private val client: AdminClient,
-    private val exceptions: ExceptionsState
 ) : ViewModel() {
 
     val output get() = client.output
 
     var query by mutableStateOf("")
 
-    fun query() = exceptions catch {
+    fun query() = viewModelScope.launch {
         client.query(query)
     }
 }
