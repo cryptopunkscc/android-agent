@@ -24,7 +24,7 @@ import cc.cryptopunks.wrapdrive.WarpdriveStatus
 import org.koin.compose.koinInject
 
 @Composable
-fun WarpdriveConnectionView(
+internal fun WarpdriveConnectionView(
     modifier: Modifier = Modifier,
     warpdriveStatus: WarpdriveStatus = koinInject(),
     content: @Composable () -> Unit,

@@ -2,9 +2,6 @@ package cc.cryptopunks.wrapdrive
 
 import kotlinx.coroutines.flow.Flow
 
-
-class WarpdriveStatus(flow: Flow<Boolean>) : Flow<Boolean> by flow
-
 interface WarpdriveClient {
     suspend fun createOffer(peerId: PeerId, filePath: String): Offer
     suspend fun acceptOffer(id: OfferId)

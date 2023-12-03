@@ -23,7 +23,7 @@ class OffersRepositoryTest {
         client = client,
         peers = peers,
         scope = CoroutineScope(Job()),
-        warpdriveStatus = WarpdriveStatus(flowOf(true))
+        warpdriveStatus = WarpdriveStatus { flowOf(true) },
     )
 
     @Before

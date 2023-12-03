@@ -16,6 +16,7 @@ val warpdriveModule = module {
     viewModelOf(::ShareViewModel)
 
     // repository
+    singleOf(::WarpdriveStatus)
     singleOf(::OffersRepository)
     singleOf(::AgentPeersRepository).bind<PeersRepository>()
 
