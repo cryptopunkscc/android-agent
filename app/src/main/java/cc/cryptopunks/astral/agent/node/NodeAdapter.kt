@@ -2,6 +2,7 @@ package cc.cryptopunks.astral.agent.node
 
 import android.content.Context
 import android.util.Log
+import cc.cryptopunks.astral.agent.util.createBackup
 import cc.cryptopunks.astral.bind.astral.Astral
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -63,19 +64,20 @@ fun Context.startAstral() {
         // Start astral daemon
         astralJob = scope.launch {
             val multicastLock = acquireMulticastWakeLock()
+            val log = astralLog
             try {
-                backupLog()
+                log.createBackup()
                 createApphostConfig()
                 createLogConfig()
                 Astral.start(astralDir.absolutePath)
             } catch (e: Throwable) {
                 e.printStackTrace()
-                log(e.stackTraceToString())
+                    log.appendText(e.stackTraceToString())
             } finally {
                 status.value = AstralStatus.Stopped
                 Log.d("AstralNetwork", "releasing multicast")
                 multicastLock.release()
-                backupLog()
+                log.createBackup()
             }
         }
 

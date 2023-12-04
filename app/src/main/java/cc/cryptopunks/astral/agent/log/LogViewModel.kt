@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import cc.cryptopunks.astral.agent.node.AstralStatus
 import cc.cryptopunks.astral.agent.node.astralLog
 import cc.cryptopunks.astral.agent.node.astralStatus
-import cc.cryptopunks.astral.agent.node.logDir
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,7 +20,7 @@ class LogViewModel(
     context: Context,
 ) : ViewModel() {
 
-    private val logFile = context.cacheDir.logDir.astralLog
+    private val logFile = context.astralLog
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val logText: StateFlow<String> = astralStatus

@@ -19,3 +19,17 @@ fun File.fileObserver(
         override fun onEvent(event: Int, path: String?) = onEvent(event, path)
     }
 }
+
+internal fun File.createBackup(
+    prefix: String = FileDateFormat.format(System.currentTimeMillis()),
+) {
+    if (!exists()) return
+    val dir = parentFile ?: return
+    val previous = dir.listFiles()?.dropLastWhile { it == this }?.lastOrNull()
+    if (md5() == previous?.md5()) return
+
+    val backupName = prefix + name
+    val backup = dir.resolve(backupName)
+
+    copyTo(backup)
+}

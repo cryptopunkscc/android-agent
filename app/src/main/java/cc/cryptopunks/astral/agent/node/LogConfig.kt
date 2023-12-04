@@ -1,20 +1,17 @@
 package cc.cryptopunks.astral.agent.node
 
 import android.content.Context
-import java.io.File
 
 internal fun Context.createLogConfig() {
     astralDir.resolve("log.yaml").run {
         if (!exists()) {
-            writeText(defaultLogConfig(cacheDir.logDir))
+            writeText(astralLogConfig())
         }
     }
 }
 
-private fun defaultLogConfig(dir: File) = """
-    log_file: ${dir.astralLog}
+private fun Context.astralLogConfig() = """
+    log_file: $astralLog
 """.trimIndent()
 
-val File.astralLog get() = resolve("astral.log")
-
-val File.logDir get() = resolve("log").apply { mkdirs() }
+val Context.astralLog get() = cacheDir.resolve("log").apply { mkdirs() }.resolve("astral.log")

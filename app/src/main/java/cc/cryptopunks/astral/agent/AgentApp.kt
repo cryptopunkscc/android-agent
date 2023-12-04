@@ -8,8 +8,10 @@ import cc.cryptopunks.astral.agent.contacts.contactsModule
 import cc.cryptopunks.astral.agent.exception.exceptionModule
 import cc.cryptopunks.astral.agent.js.jsAppModule
 import cc.cryptopunks.astral.agent.log.logModule
+import cc.cryptopunks.astral.agent.logcat.logcatModule
 import cc.cryptopunks.astral.agent.main.mainModule
 import cc.cryptopunks.astral.agent.node.nodeModule
+import cc.cryptopunks.astral.agent.logcat.LogcatBackup
 import cc.cryptopunks.wrapdrive.warpdriveModule
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
@@ -23,6 +25,7 @@ class AgentApp : Application() {
         startKoin {
             androidContext(applicationContext)
             modules(
+                logcatModule,
                 exceptionModule,
                 nodeModule,
                 mainModule,
@@ -36,5 +39,6 @@ class AgentApp : Application() {
             )
         }
         setDefaultUncaughtExceptionHandler(get())
+        get<LogcatBackup>().start()
     }
 }
