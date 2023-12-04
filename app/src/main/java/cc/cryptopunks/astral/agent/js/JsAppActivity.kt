@@ -1,38 +1,36 @@
 package cc.cryptopunks.astral.agent.js
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.webkit.MimeTypeMap
 import android.webkit.WebChromeClient
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.core.net.toFile
-import cc.cryptopunks.astral.bind.astral.Astral
 import cc.cryptopunks.astral.bind.astral.JsAppHostClient
+import org.koin.android.ext.android.inject
 import java.io.File
 
 internal fun Context.startJsAppActivity(app: JsApp) {
-    val intent = Intent(this, JsAppActivity::class.java)
     val dir = appsDir.resolve(app.dir)
     val file = dir.resolve("index.html")
     val uri = Uri.fromFile(file)
+    val intent = Intent()
+    val activity = "$packageName.js.JsAppActivity\$Id${app.activity}"
+    intent.component = ComponentName(packageName, activity)
     intent.data = uri
-    intent.addFlags(/*Intent.FLAG_ACTIVITY_NEW_DOCUMENT or */Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+    intent.putExtra("title", app.name)
     startActivity(intent)
 }
 
-class JsAppActivity : ComponentActivity() {
+sealed class JsAppActivity : ComponentActivity() {
 
     private val webView: WebView by lazy { WebView(this) }
-    private val appHostClient: JsAppHostClient by lazy { Astral.newJsAppHostClient() }
+    private val appHostClient: JsAppHostClient by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +38,7 @@ class JsAppActivity : ComponentActivity() {
 
         val uri = intent.data ?: return
         val dir = uri.toFile().parentFile ?: File("")
+        title = intent.getStringExtra("title") ?: title
 
         webView.apply {
             webViewClient = FileResolvingWebViewClient(dir)
@@ -75,40 +74,31 @@ class JsAppActivity : ComponentActivity() {
         super.onDestroy()
         appHostClient.close()
     }
-}
 
-private class FileResolvingWebViewClient(
-    private val dir: File,
-) : WebViewClient() {
+    class Id0 : JsAppActivity()
+    class Id1 : JsAppActivity()
+    class Id2 : JsAppActivity()
+    class Id3 : JsAppActivity()
+    class Id4 : JsAppActivity()
+    class Id5 : JsAppActivity()
+    class Id6 : JsAppActivity()
+    class Id7 : JsAppActivity()
+    class Id8 : JsAppActivity()
+    class Id9 : JsAppActivity()
+    class Id10 : JsAppActivity()
+    class Id11 : JsAppActivity()
+    class Id12 : JsAppActivity()
+    class Id13 : JsAppActivity()
+    class Id14 : JsAppActivity()
+    class Id15 : JsAppActivity()
+    class Id16 : JsAppActivity()
+    class Id17 : JsAppActivity()
+    class Id18 : JsAppActivity()
+    class Id19 : JsAppActivity()
 
-    private val tag = javaClass.simpleName
 
-    override fun shouldInterceptRequest(
-        view: WebView,
-        request: WebResourceRequest,
-    ): WebResourceResponse? {
-        when (request.url.scheme) {
-            "file" -> {
-
-                // Resolve requested file
-                val path = request.url.path ?: return null
-                Log.d(tag, "requesting path: $path")
-                val relative = if (path.startsWith('/')) path.drop(1) else path
-                val file = dir.resolve(relative)
-                Log.d(tag, "resolved file: ${file.absolutePath}, exist: ${file.exists()}")
-                file.exists() || return null
-
-                // Prepare response data
-                val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
-                val encoding = "UTF-8"
-                val data = file.inputStream()
-
-                return WebResourceResponse(mimeType, encoding, data)
-            }
-
-            else -> {
-                return super.shouldInterceptRequest(view, request)
-            }
-        }
+    companion object {
+        const val Limit = 20
     }
 }
+

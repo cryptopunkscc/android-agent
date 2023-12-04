@@ -17,10 +17,13 @@ import java.util.UUID
 
 class JsAppsManager(
     private val context: Context,
+    private val activities: JsAppActivities,
 ) {
     private val tag = javaClass.simpleName
 
-    private val _apps = MutableStateFlow(context.listApps())
+    private val _apps = MutableStateFlow(
+        context.listApps().map { app -> app.copy(activity = activities[app.name]) }
+    )
 
     private val running = mutableMapOf<String, Worker>()
 
@@ -55,6 +58,7 @@ class JsAppsManager(
         UnpackZipException::class,
     )
     internal fun install(uri: Uri): JsApp {
+        val activity = activities.nextId()
         val appsDir = context.appsDir
 
         // Resolve stream from bundle uri
@@ -92,8 +96,8 @@ class JsAppsManager(
             uninstall(finalName)
         }
 
-        // Rename temporary dir to final
         try {
+            // Rename temporary dir to final
             val renamed = tempDir.renameTo(finalDir)
             renamed || throw IOException(
                 "Failed to rename temporary directory to the final location"
@@ -105,7 +109,11 @@ class JsAppsManager(
         }
 
         // Finalize
-        app = app.copy(dir = finalName)
+        app = app.copy(
+            dir = finalName,
+            activity = activity,
+        )
+        activities[app.name] = activity
         Log.d(tag, "installed js app ${app.name}")
         _apps.update { list ->
             if (list.contains(app)) list
@@ -140,6 +148,9 @@ class JsAppsManager(
         // remove app directory
         val dir = context.appsDir.resolve(app.dir)
         dir.deleteRecursively()
+
+        // detach activity id
+        activities[app.name] = -1
 
         // remove from state
         _apps.update { list ->
