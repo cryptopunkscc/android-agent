@@ -1,8 +1,11 @@
 package cc.cryptopunks.astral.agent.api
 
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
+import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.core.content.ContextCompat
 import cc.cryptopunks.astral.agent.api.Permissions.Key.Message
 import cc.cryptopunks.astral.agent.api.Permissions.Key.Rejected
 import cc.cryptopunks.astral.agent.api.Permissions.Key.Required
@@ -38,3 +41,7 @@ object Permissions {
     fun getRejected(intent: Intent): Array<String> =
         intent.getStringArrayExtra(Rejected) ?: emptyArray()
 }
+
+fun Context.hasPermissions(name: String): Boolean =
+    ContextCompat.checkSelfPermission(applicationContext, name) ==
+        PackageManager.PERMISSION_GRANTED

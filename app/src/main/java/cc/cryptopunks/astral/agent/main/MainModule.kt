@@ -7,4 +7,5 @@ import org.koin.dsl.module
 
 val mainModule = module {
     singleOf(::MainServiceStatus).bind<ServiceStatus>()
+    singleOf(::MainPermissions)
 }

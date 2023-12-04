@@ -2,10 +2,7 @@ package cc.cryptopunks.astral.agent.permission
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -51,21 +48,17 @@ class PermissionActivity : ComponentActivity() {
         val required = Permissions.getRequired(intent).toMutableSet()
 
         required.isNotEmpty() || return
-
         setContent {
             AstralTheme {
                 PermissionsView(message) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        if (required.remove(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)) {
-                            val uri = Uri.parse("package:$packageName")
-                            val intent = Intent(
-                                Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                                uri
-                            )
-                            requestStorage.launch(intent)
-                        }
+                    val perm = required.find { perm ->
+                        perm.startsWith("android.settings")
                     }
-                    if (required.isNotEmpty()) {
+                    if (perm != null) {
+                        val uri = Uri.parse("package:$packageName")
+                        val intent = Intent(perm, uri)
+                        requestStorage.launch(intent)
+                    } else if (required.isNotEmpty()) {
                         requestPermission.launch(required.toTypedArray())
                     }
                 }
